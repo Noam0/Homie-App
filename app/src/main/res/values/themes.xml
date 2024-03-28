@@ -6,4 +6,15 @@
     </style>
 
     <style name="Theme.Homie" parent="Base.Theme.Homie" />
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+        <!-- Other theme attributes -->
+        <item name="shapeAppearanceOverlay">@style/roundedImageView</item>
+    </style>
+
+    <style name="roundedImageView">
+        <item name="cornerSize">50%</item>
+        <item name="strokeColor">#FFFFFF</item> <!-- Stroke color -->
+        <item name="strokeWidth">5dp</item> <!-- Stroke width -->
+    </style>
 </resources>

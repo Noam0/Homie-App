@@ -14,6 +14,8 @@ import com.example.homie.Fragments.ShoppingFragment;
 import com.example.homie.Fragments.TasksFragment;
 import com.example.homie.R;
 import com.example.homie.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,4 +51,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.Main_frame_layout,fragment);
         fragmentTransaction.commit();
     }
+
+
+
+
 }
