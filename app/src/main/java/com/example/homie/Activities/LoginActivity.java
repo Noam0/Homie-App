@@ -8,7 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.example.homie.Models.CurrentUser;
+import com.example.homie.Models.Event;
+import com.example.homie.Models.HomeData;
+import com.example.homie.Models.User;
 import com.example.homie.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -19,15 +24,23 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private MaterialButton SIGN_OUT_BTN;
-
+    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseRef = mDatabase.getReference();
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +49,57 @@ public class LoginActivity extends AppCompatActivity {
         findViews();
         initViews();
         auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-        if(user == null){
+        firebaseUser = auth.getCurrentUser();
+        if(firebaseUser == null){
             login();
         }else{
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish(); // Finish LoginActivity to prevent going back to it when pressing back button
-            String uid = user.getUid();
-            String phone = user.getPhoneNumber();
-            String name = user.getDisplayName();
-            String pid = user.getProviderId();
-            String tid = user.getTenantId();
-            Uri photo = user.getPhotoUrl();
-            int x = 0;
+            createNewUser();
+        }
+    }
 
+    private void createNewUser() {
+        // Create a new User instance with the provided data and homeData
+        User user = new User().setUid(firebaseUser.getUid()).setName(firebaseUser.getDisplayName());
+
+       // user.getHomeData().getAllTasks().add(new com.example.homie.Models.Task().setDescription("nowowow"));
+        //Event event = new Event().setDescription("blabla");
+        //user.getHomeData().getEventsList().add(event);
+
+        // Save the user to the "UserInfo" node in the database
+        databaseRef.child("UserInfo").child(firebaseUser.getUid()).setValue(user);
+        userLoggedIn();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if(currentUser != null){
+            userLoggedIn();
+    }
+
+}
+
+    private void userLoggedIn() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+/*
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseUser = auth.getCurrentUser();
+        if(firebaseUser == null){
+            login();
+        }else{
+            loadUser();
         }
 
-
     }
+*/
+
 
     private void initViews() {
         SIGN_OUT_BTN.setOnClickListener(v -> {
@@ -115,5 +161,47 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+/*
+    private void loadUser() {
+        databaseRef = FirebaseDatabase.getInstance().getReference("UserInfo");
+        databaseRef.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists())
+                    CurrentUser.getInstance().setUserProfile(snapshot.getValue(User.class));
+                else {
+                    Log.d("in creating user", "creating user");
+                    createNewUser();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish(); // Finish LoginActivity to prevent going back to it when pressing back button
+    }
+
+    */
+
+/*
+    private void createNewUser() {
+        HomeData homeData = new HomeData();
+        User newUser = new User()
+                .setUid(firebaseUser.getUid())
+                .setName(firebaseUser.getDisplayName())
+                .setImage(firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null)
+                .setIsRegistered(true)
+                .setHomeData(homeData); //
+
+        CurrentUser.getInstance().setUserProfile(newUser);
+        Log.d("", newUser.toString());
+
+        // Save the user to the "UserInfo" node in the database
+        databaseRef = FirebaseDatabase.getInstance().getReference("UserInfo");
+        databaseRef.child(firebaseUser.getUid()).setValue(newUser);
+    }
+*/
 
 }

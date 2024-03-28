@@ -4,12 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.TasksFragment"
-    android:background="#b21231">
+    android:background="@drawable/backgroundhomie">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_Task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="write your text">
+        </com.google.android.material.textfield.TextInputEditText>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addTask_BTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="add Task">
+
+        </com.google.android.material.button.MaterialButton>
+
+    </LinearLayout>
+
 
 </FrameLayout>
