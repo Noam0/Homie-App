@@ -15,10 +15,15 @@ public class User {
     private HomeData homeData;
 
     public User() {
+
         this.homeData = new HomeData();
     }
 
-
+    public User(String uid, String name) {
+        this.uid = uid;
+        this.name = name;
+        this.homeData = new HomeData();
+    }
 
     public String getUid() {
         return uid;

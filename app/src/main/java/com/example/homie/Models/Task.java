@@ -15,6 +15,11 @@ public class Task {
 
     }
 
+    public Task(String description,  String category) {
+        this.description = description;
+        this.category = category;
+    }
+
     public String getDescription() {
         return description;
     }

@@ -53,21 +53,10 @@ public class LoginActivity extends AppCompatActivity {
         if(firebaseUser == null){
             login();
         }else{
-            createNewUser();
+            loadUser();
         }
-    }
-
-    private void createNewUser() {
-        // Create a new User instance with the provided data and homeData
-        User user = new User().setUid(firebaseUser.getUid()).setName(firebaseUser.getDisplayName());
-
-       // user.getHomeData().getAllTasks().add(new com.example.homie.Models.Task().setDescription("nowowow"));
-        //Event event = new Event().setDescription("blabla");
-        //user.getHomeData().getEventsList().add(event);
-
-        // Save the user to the "UserInfo" node in the database
-        databaseRef.child("UserInfo").child(firebaseUser.getUid()).setValue(user);
-        userLoggedIn();
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish(); // Finish LoginActivity to prevent going back to it when pressing back button
     }
 
     @Override
@@ -86,19 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-/*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        firebaseUser = auth.getCurrentUser();
-        if(firebaseUser == null){
-            login();
-        }else{
-            loadUser();
-        }
-
-    }
-*/
 
 
     private void initViews() {
@@ -161,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-/*
+
     private void loadUser() {
         databaseRef = FirebaseDatabase.getInstance().getReference("UserInfo");
         databaseRef.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -170,7 +146,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (snapshot.exists())
                     CurrentUser.getInstance().setUserProfile(snapshot.getValue(User.class));
                 else {
-                    Log.d("in creating user", "creating user");
                     createNewUser();
                 }
             }
@@ -179,29 +154,18 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        finish(); // Finish LoginActivity to prevent going back to it when pressing back button
+
     }
 
-    */
 
-/*
+
+
     private void createNewUser() {
-        HomeData homeData = new HomeData();
-        User newUser = new User()
-                .setUid(firebaseUser.getUid())
-                .setName(firebaseUser.getDisplayName())
-                .setImage(firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : null)
-                .setIsRegistered(true)
-                .setHomeData(homeData); //
-
+        User newUser = new User(firebaseUser.getUid(), firebaseUser.getDisplayName());
         CurrentUser.getInstance().setUserProfile(newUser);
-        Log.d("", newUser.toString());
-
-        // Save the user to the "UserInfo" node in the database
         databaseRef = FirebaseDatabase.getInstance().getReference("UserInfo");
         databaseRef.child(firebaseUser.getUid()).setValue(newUser);
     }
-*/
+
 
 }
