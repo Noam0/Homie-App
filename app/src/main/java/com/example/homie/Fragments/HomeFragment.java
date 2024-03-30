@@ -34,7 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment {
 
-
+private MaterialTextView home_MTV_username;
 private MaterialTextView home_MTV_upComingTask;
 private CircleImageView circular_image_view;
 
@@ -61,6 +61,7 @@ private CircleImageView circular_image_view;
     private void findViewsById(View view) {
         home_MTV_upComingTask = view.findViewById(R.id.home_MTV_upComingTask);
         circular_image_view = view.findViewById(R.id.circular_image_view);
+
 
     }
     private void initHomeFragmentUI() {
