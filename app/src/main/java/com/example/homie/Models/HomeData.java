@@ -8,25 +8,27 @@ import java.util.Set;
 
 public class HomeData {
 
-    private ArrayList<Task> allTasks;
+    private Map<String, Task> allTasks; // Change from ArrayList<Task> to Map<String, Task>
+
     private ArrayList<Transaction> transactionsList;
+
     private ArrayList<Event> eventsList;
+
     private ArrayList<GroceryItem> groceryItemsList;
 
 
-
     public HomeData() {
-        allTasks = new ArrayList<>();
+        allTasks = new HashMap<>(); // Initialize as a HashMap
         transactionsList = new ArrayList<>();
         eventsList = new ArrayList<>();
         groceryItemsList = new ArrayList<>();
     }
 
-    public ArrayList<Task> getAllTasks() {
+    public Map<String , Task> getAllTasks() {
         return allTasks;
     }
 
-    public void setAllTasks(ArrayList<Task> allTasks) {
+    public void setAllTasks(Map<String, Task> allTasks) {
         this.allTasks = allTasks;
     }
 
@@ -54,4 +56,25 @@ public class HomeData {
         this.groceryItemsList = groceryItemsList;
     }
 
+
+
+    public void addTask(Task task,String taskId){
+        allTasks.put(taskId,task);
+
+    }
+
+    @Override
+    public String toString() {
+        return "HomeData{" +
+                "allTasks=" + allTasks +
+                ", transactionsList=" + transactionsList +
+                ", eventsList=" + eventsList +
+                ", groceryItemsList=" + groceryItemsList +
+                '}';
+    }
+
+    public ArrayList<Task> convertTasksToList() {
+        ArrayList<Task> taskList = new ArrayList<>(allTasks.values());
+        return taskList;
+    }
 }

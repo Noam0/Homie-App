@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.example.homie.Models.CurrentUser;
 import com.example.homie.Models.Event;
@@ -30,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -46,34 +49,27 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //hide purpule bar at the top
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         findViews();
         initViews();
         auth = FirebaseAuth.getInstance();
-        firebaseUser = auth.getCurrentUser();
-        if(firebaseUser == null){
-            login();
-        }else{
-            loadUser();
-        }
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        finish(); // Finish LoginActivity to prevent going back to it when pressing back button
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = auth.getCurrentUser();
-        if(currentUser != null){
-            userLoggedIn();
+        if(currentUser == null) {
+            login();
+        }else {
+            loadUser();
+        }
+
     }
 
-}
 
-    private void userLoggedIn() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
+
 
 
 
@@ -92,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void findViews() {
+
         SIGN_OUT_BTN = findViewById(R.id.SIGN_OUT_BTN);
     }
 
@@ -139,33 +136,46 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void loadUser() {
-        databaseRef = FirebaseDatabase.getInstance().getReference("UserInfo");
-        databaseRef.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists())
-                    CurrentUser.getInstance().setUserProfile(snapshot.getValue(User.class));
-                else {
-                    createNewUser();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            databaseRef = FirebaseDatabase.getInstance().getReference("UserInfo");
+            databaseRef.child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        CurrentUser.getInstance().setUserProfile(snapshot.getValue(User.class));
 
-            }
-        });
+                    } else {
+                        createNewUser();
+
+                    }
+                    goToMainActivity();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle onCancelled
+                }
+            });
+        } else {
+            // Handle case where user is not logged in
+        }
 
     }
 
 
-
-
     private void createNewUser() {
-        User newUser = new User(firebaseUser.getUid(), firebaseUser.getDisplayName());
+
+
+        User newUser = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),firebaseUser.getPhotoUrl().toString());
         CurrentUser.getInstance().setUserProfile(newUser);
         databaseRef = FirebaseDatabase.getInstance().getReference("UserInfo");
         databaseRef.child(firebaseUser.getUid()).setValue(newUser);
     }
 
-
+    private void goToMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

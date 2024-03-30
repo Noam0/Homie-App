@@ -2,15 +2,15 @@ package com.example.homie.Models;
 
 import android.net.Uri;
 
+import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class User {
 
     private String uid;
     private String name;
-    private Uri image;
+    private String image;
+    private boolean isRegistered;
 
     private HomeData homeData;
 
@@ -19,7 +19,8 @@ public class User {
         this.homeData = new HomeData();
     }
 
-    public User(String uid, String name) {
+    public User(String uid, String name,String image) {
+        this.image = image;
         this.uid = uid;
         this.name = name;
         this.homeData = new HomeData();
@@ -43,17 +44,24 @@ public class User {
         return this;
     }
 
-    public Uri getImage() {
+    public String getImage() {
         return image;
     }
 
-    public User setImage(Uri image) {
+    public User setImage(String image) {
         this.image = image;
         return this;
     }
 
 
+    public boolean isRegistered() {
+        return isRegistered;
+    }
 
+    public User setRegistered(boolean registered) {
+        isRegistered = registered;
+        return this;
+    }
 
     public HomeData getHomeData() {
         return homeData;
@@ -63,6 +71,20 @@ public class User {
         this.homeData = homeData;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid='" + uid + '\'' +
+                ", name='" + name + '\'' +
+                ", image=" + image +
+                ", isRegistered=" + isRegistered +
+                ", homeData=" + homeData +
+                '}';
+    }
+
+
+
 }
 
 
