@@ -116,25 +116,86 @@
     </com.google.android.material.textview.MaterialTextView>
 
 
-    <LinearLayout
+
+
+    <GridLayout
+        android:id="@+id/Home_GridLayout_homeMembers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:columnCount="8">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:elevation="10dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
+            android:src="@color/black"
+            android:layout_marginEnd="5dp"
+            app:civ_border_color="#ffffff"
+            />
 
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:scaleType="centerCrop"
-        app:shapeAppearanceOverlay="@style/roundedImageView"
-        app:srcCompat="@drawable/profileimagenoam"
-        android:elevation="10dp"
-        android:layout_gravity="start"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="6dp"
-        />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:elevation="10dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/profileimagenoam"
+            android:layout_marginEnd="5dp"
+            app:civ_border_color="#ffffff"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:elevation="10dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            app:civ_border_color="#ffffff"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:elevation="10dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            app:civ_border_color="#ffffff"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:elevation="10dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            app:civ_border_color="#ffffff"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:elevation="10dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            app:civ_border_color="#ffffff"/>
 
-    </LinearLayout>
+
+    </GridLayout>
+
+
+
+
+
+
+
+
+
 
 
     <LinearLayout
@@ -166,7 +227,7 @@
     android:id="@+id/home_MTV_upComingTask"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="You have 7 up coming task"
+    android:text="You have 0 up coming task"
     android:textSize="18sp"
     android:textStyle="bold"
     android:textAlignment="center"
@@ -196,7 +257,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="You have 9 items in shopping list"
+                android:text="You have 0 items in shopping list"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textAlignment="center"

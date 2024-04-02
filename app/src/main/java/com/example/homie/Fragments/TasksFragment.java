@@ -22,6 +22,8 @@ import com.example.homie.Models.CurrentUser;
 import com.example.homie.Models.HomeData;
 import com.example.homie.Models.Task;
 import com.example.homie.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -171,25 +173,45 @@ public class TasksFragment extends Fragment {
 
 
 
-    private void addTask(String newTask) {
+    private void addTask(final String newTask) {
         // Get the UID of the currently logged-in user
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Get a reference to the user's data in the database
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(userId);
         // Generate a unique ID for the new task
-        String taskId = UUID.randomUUID().toString();
+        final String taskId = UUID.randomUUID().toString();
         // Create a new Task object with the provided task description
-        Task task = new Task(newTask, "category"); // Assuming you have a category for the task
+        final Task task = new Task(newTask, "category"); // Assuming you have a category for the task
         // Get a reference to the tasks node in the user's data
-        DatabaseReference tasksRef = userRef.child("homeData").child("allTasks");
+        final DatabaseReference tasksRef = userRef.child("homeData").child("allTasks");
         // Push the new task to the database using the generated task ID
+        tasksRef.child(taskId).setValue(task).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // Data successfully saved to the database
+                // Now, for each existing member in the list, add the new task to their list
+                for (String memberUid : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()) {
+                    addTaskToMember(memberUid, taskId, task);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Handle any errors that occurred while saving data
+            }
+        });
+    }
+
+    private void addTaskToMember(String memberUid, String taskId, Task task) {
+        // Get a reference to the member's data location
+        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference().child("UserInfo").child(memberUid);
+        // Get a reference to the tasks node in the member's data
+        DatabaseReference tasksRef = memberRef.child("homeData").child("allTasks");
+        // Push the new task to the member's list of tasks
         tasksRef.child(taskId).setValue(task);
-        CurrentUser.getInstance().getUserProfile().getHomeData().addTask(task,taskId);
-        Log.d("problem", CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().size()+"");
-        allTaskAsArrayList.add(task);
-        adapter.notifyItemInserted(allTaskAsArrayList.size()-1);
 
     }
+
 
     public TasksFragment(ArrayList<Task> allTaskAsArrayList) {
         this.allTaskAsArrayList = allTaskAsArrayList;

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     FirebaseUser firebaseUser;
     ArrayList<Task> allTasksAsArrayList;
+
+    private String newHomeMemberToAdd;
 
 
     @Override
@@ -77,9 +80,11 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
+
+
+
+
     }
-
-
 
 
     private void replaceFragment(Fragment fragment){
