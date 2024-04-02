@@ -8,7 +8,84 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        tools:ignore="MissingConstraints"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home Tasks"
+            android:layout_gravity="center"
+            tools:ignore="MissingConstraints"
+            android:layout_marginTop="10dp"
+            android:textSize="30sp">
+        </com.google.android.material.textview.MaterialTextView>
+    </LinearLayout>
+
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/Tasks_CV_addCardView"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_margin="25dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#2192B6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Task"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="10dp">
+
+        </com.google.android.material.textview.MaterialTextView>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_Task"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:hint="description of the task"
+            android:layout_marginHorizontal="20dp">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addTask_BTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="40dp"
+            android:text="confirm"
+            android:background="#62b90e">
+
+        </androidx.appcompat.widget.AppCompatButton>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addTask_Btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="100dp"
+            android:text="cancel"
+            android:background="#ae3751">
+
+        </androidx.appcompat.widget.AppCompatButton>
+    <!-- Add your content inside the CardView here -->
+
+</androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Tasks_RCV_taskRCV"
@@ -20,31 +97,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+
     </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editText_Task"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="write your text">
-        </com.google.android.material.textfield.TextInputEditText>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addTask_BTN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="add Task">
 
-        </com.google.android.material.button.MaterialButton>
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/Tasks_BTN_add"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/add_icon"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="10dp">
 
-    </LinearLayout>
+    </com.google.android.material.imageview.ShapeableImageView>
+
 
 
 

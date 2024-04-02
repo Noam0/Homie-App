@@ -34,7 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment {
 
-private MaterialTextView home_MTV_username;
+private MaterialTextView home_MTV_UserName;
 private MaterialTextView home_MTV_upComingTask;
 private CircleImageView circular_image_view;
 
@@ -61,7 +61,7 @@ private CircleImageView circular_image_view;
     private void findViewsById(View view) {
         home_MTV_upComingTask = view.findViewById(R.id.home_MTV_upComingTask);
         circular_image_view = view.findViewById(R.id.circular_image_view);
-
+        home_MTV_UserName = view.findViewById(R.id.home_MTV_UserName);
 
     }
     private void initHomeFragmentUI() {
@@ -79,6 +79,7 @@ private CircleImageView circular_image_view;
                     User user = snapshot.getValue(User.class);
                     if (user != null) {
                         loadingImageUrl();
+                        home_MTV_UserName.setText(setFirstNameOfUser(user.getName()));
                     }
                 } else {
                     // Handle case where the data doesn't exist
@@ -106,6 +107,7 @@ private CircleImageView circular_image_view;
                         String taskCount = String.valueOf(homeData.getAllTasks().size());
                         home_MTV_upComingTask.setText("You have " + taskCount + " upcoming tasks");
 
+
                     }
                 } else {
                     // Handle case where the data doesn't exist
@@ -126,5 +128,12 @@ private CircleImageView circular_image_view;
         FirebaseUser currentUser = auth.getCurrentUser();
         String photoUrl = String.valueOf(currentUser.getPhotoUrl());
         Picasso.get().load(photoUrl).into(circular_image_view);
+    }
+
+
+    private String setFirstNameOfUser(String fullName){
+        String[] nameParts = fullName.split(" ");
+        String firstName = nameParts[0];
+        return firstName;
     }
 }
