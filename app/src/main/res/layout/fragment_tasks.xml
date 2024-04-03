@@ -28,7 +28,7 @@
     </LinearLayout>
 
 
-
+<!---
     <androidx.cardview.widget.CardView
         android:id="@+id/Tasks_CV_addCardView"
         android:layout_width="match_parent"
@@ -83,10 +83,9 @@
             android:background="#ae3751">
 
         </androidx.appcompat.widget.AppCompatButton>
-    <!-- Add your content inside the CardView here -->
 
 </androidx.cardview.widget.CardView>
-
+-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Tasks_RCV_taskRCV"
         android:layout_width="match_parent"

@@ -6,7 +6,7 @@ public class Task {
 
     private String description;
 
-    private Date deadline;
+    private String deadline;
 
     private boolean done;
     private String category;
@@ -15,9 +15,10 @@ public class Task {
 
     }
 
-    public Task(String description,  String category) {
+    public Task(String description,  String category, String deadline) {
         this.description = description;
         this.category = category;
+        this.deadline = deadline;
     }
 
     public String getDescription() {
@@ -30,11 +31,11 @@ public class Task {
     }
 
 
-    public Date getDeadline() {
+    public String getDeadline() {
         return deadline;
     }
 
-    public Task setDeadline(Date deadline) {
+    public Task setDeadline(String deadline) {
         this.deadline = deadline;
         return this;
     }

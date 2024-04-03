@@ -6,12 +6,11 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardCornerRadius="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="4dp"
         android:layout_marginHorizontal="8dp">
@@ -20,7 +19,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:weightSum="5">
+            android:weightSum="6">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/row_RCV_categoryIMG"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/screwdriver"
+                android:layout_gravity="center"
+                >
+
+            </com.google.android.material.imageview.ShapeableImageView>
 
             <!-- First Layout with Weight 1 -->
             <LinearLayout
@@ -37,8 +46,8 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:textColor="@color/greyLightText"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
                     >
                 </TextView>
                 <TextView
@@ -47,11 +56,10 @@
                     android:layout_height="wrap_content"
                     android:text="14"
                     android:textStyle="bold"
-                    android:textSize="30sp"
-                    android:textColor="#3571b4 "
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginVertical="0dp">
+                    android:textSize="28sp"
+                    android:textColor="#3571b4"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="2dp">
 
                 </TextView>
             </LinearLayout>
@@ -60,7 +68,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2.5"
+                android:layout_weight="3.5"
                 android:orientation="vertical">
 
                 <TextView
@@ -70,20 +78,9 @@
                     android:text="taking out the trash"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="3dp"
-                    android:layout_marginTop="14dp"/>
-
-                <TextView
-                    android:id="@+id/row_RCV_taskCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="category"
-                    android:textStyle="normal"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="5dp">
-
-                </TextView>
+                    android:layout_marginTop="18dp"/>
                 <!-- Content for Second Layout -->
 
             </LinearLayout>
@@ -101,7 +98,7 @@
                     android:src="@drawable/baseline_done_24"
                     android:scaleType="fitCenter"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="25dp">
+                    android:layout_marginLeft="0dp">
 
                 </com.google.android.material.imageview.ShapeableImageView>
                 <com.google.android.material.imageview.ShapeableImageView
