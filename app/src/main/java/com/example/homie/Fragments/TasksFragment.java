@@ -2,6 +2,9 @@ package com.example.homie.Fragments;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +19,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.homie.Adapters.TaskAdapter;
 import com.example.homie.Models.CurrentUser;
@@ -36,8 +45,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -45,15 +58,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TasksFragment extends Fragment {
 
     private ArrayList<Task> allTaskAsArrayList;
-    private TextInputEditText editText_Task;
-    private AppCompatButton addTask_BTN;
+    private AppCompatButton addTask_BTN_confirm;
     private RecyclerView Tasks_RCV_taskRCV;
     private TaskAdapter adapter;
     private ShapeableImageView Tasks_BTN_add;
+    private EditText task_format_description;
+    private Spinner categorySpinner;
+    private ArrayList<String> taskCategories;
+    private ShapeableImageView addTask_Btn_cancel;
 
-    private CardView Tasks_CV_addCardView;
-
-    private AppCompatButton addTask_Btn_cancel;
+    private DatePicker task_format_date;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,108 +76,154 @@ public class TasksFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
         findViews(view);
-
-
         initViews();
         return view;
 
     }
-
     private void findViews(View view) {
-        editText_Task = view.findViewById(R.id.editText_Task);
-        addTask_BTN = view.findViewById(R.id.addTask_BTN);
+
+
+
         Tasks_RCV_taskRCV = view.findViewById(R.id.Tasks_RCV_taskRCV);
         Tasks_BTN_add = view.findViewById(R.id.Tasks_BTN_add);
-        Tasks_CV_addCardView = view.findViewById(R.id.Tasks_CV_addCardView);
         addTask_Btn_cancel = view.findViewById(R.id.addTask_Btn_cancel);
+        categorySpinner = view.findViewById(R.id.task_format_category_spinner);
+
+
 
 
     }
 
-    private void initViews() {
-        addTask_BTN.setOnClickListener(v -> {
-            String newTask = editText_Task.getText().toString();
-            if(newTask.length() != 0) {
-                addTask(newTask);
+    private void addTaskOnClickListener() {
+
+
+            String category = getTaskCategoryFromSpinner();//getting category
+            Date taskDeadline = new Date();
+            taskDeadline = getDeadline();//getting date
+            String taskDescription = "";
+            if(task_format_description.getText().length() != 0){
+            taskDescription = GetTaskDescription();
+            addTask(taskDescription,category,taskDeadline);
+            Toast.makeText(getActivity(), "Task successfully added!", Toast.LENGTH_SHORT).show();
+            }else {
+            Toast.makeText(getActivity(), "Task description cannot be empty", Toast.LENGTH_SHORT).show();
+
             }
-            editText_Task.setText("");
-            //MakeToast
-        });
+            task_format_description.setText("");
 
-        addTask_Btn_cancel.setOnClickListener(v ->{
 
-            removeVisibilityToElements();
-        });
 
-        setVisibilityToElements();
+        
+    }
+
+    private Date getDeadline() {
+        // Get the selected date from the DatePicker
+        int day = task_format_date.getDayOfMonth();
+        int month = task_format_date.getMonth();
+        int year = task_format_date.getYear();
+
+        // Use a Calendar object to set the selected date
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear(); // Clear the calendar to reset all fields
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+
+        // Return the Date object
+        return calendar.getTime();
+    }
+    private String getTaskCategoryFromSpinner() {
+        return categorySpinner.getSelectedItem().toString();
+    }
+
+    private String GetTaskDescription() {
+        return task_format_description.getText().toString();
+    }
+
+
+
+    private void initViews() {
+        //setVisibilityToElements();
         initTaskArray();
-        initButtonAdd();
-
-
+        initButtonAddAndCancel();
         adapter = new TaskAdapter(getActivity().getApplicationContext(), allTaskAsArrayList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         Tasks_RCV_taskRCV.setAdapter(adapter);
         Tasks_RCV_taskRCV.setLayoutManager(linearLayoutManager);
+        initSpinner();
     }
 
-    private void setVisibilityToElements() {
-        Tasks_CV_addCardView.setVisibility(View.GONE);
-        editText_Task.setVisibility(View.GONE);
-        addTask_BTN.setVisibility(View.GONE);
-    }
-
-    private void initButtonAdd(){
-        Tasks_BTN_add.setOnClickListener(v->{
-
-            ObjectAnimator fadeInAnimator = ObjectAnimator.ofFloat(Tasks_CV_addCardView, "alpha", 0f, 1f);
-            fadeInAnimator.setDuration(500); // Animation duration in milliseconds
-
-// Define animation for editText_Task
-            ObjectAnimator editTextFadeInAnimator = ObjectAnimator.ofFloat(editText_Task, "alpha", 0f, 1f);
-            editTextFadeInAnimator.setDuration(500); // Animation duration in milliseconds
-
-// Define animation for addTask_BTN
-            ObjectAnimator addTaskBtnFadeInAnimator = ObjectAnimator.ofFloat(addTask_BTN, "alpha", 0f, 1f);
-            addTaskBtnFadeInAnimator.setDuration(500); // Animation duration in milliseconds
-
-// Show the pop-up card view with animations
-            Tasks_CV_addCardView.setVisibility(View.VISIBLE);
-            editText_Task.setVisibility(View.VISIBLE);
-            addTask_BTN.setVisibility(View.VISIBLE);
-
-            fadeInAnimator.start();
-            editTextFadeInAnimator.start();
-            addTaskBtnFadeInAnimator.start();
+    private void initSpinner() {
+        // Inflate the layout containing the Spinner
+        View spinnerLayout = getLayoutInflater().inflate(R.layout.task_format, null);
+        // Find the Spinner within the inflated layout
+        Spinner categorySpinner = spinnerLayout.findViewById(R.id.task_format_category_spinner);
 
 
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+        categorySpinner.setAdapter(arrayAdapter);
 
+        // Set the item selection listener for the spinner
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String item = adapterView.getItemAtPosition(position).toString();
+                // Handle item selection here if needed
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle nothing selected if needed
+            }
         });
     }
 
-    private void removeVisibilityToElements() {
-        // Define animation for the popupCardView
-        ObjectAnimator fadeOutAnimator = ObjectAnimator.ofFloat(Tasks_CV_addCardView, "alpha", 1f, 0f);
-        fadeOutAnimator.setDuration(500); // Animation duration in milliseconds
 
-        // Define animation for editText_Task
-        ObjectAnimator editTextFadeOutAnimator = ObjectAnimator.ofFloat(editText_Task, "alpha", 1f, 0f);
-        editTextFadeOutAnimator.setDuration(500); // Animation duration in milliseconds
+    private void initButtonAddAndCancel() {
+        Tasks_BTN_add.setOnClickListener(v -> {
+            AlertDialog.Builder myDialogBuilder = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View myView = inflater.inflate(R.layout.task_format, null);
+            myDialogBuilder.setView(myView);
 
-        // Define animation for addTask_BTN
-        ObjectAnimator addTaskBtnFadeOutAnimator = ObjectAnimator.ofFloat(addTask_BTN, "alpha", 1f, 0f);
-        addTaskBtnFadeOutAnimator.setDuration(500); // Animation duration in milliseconds
+            final AlertDialog dialog = myDialogBuilder.create();
+            dialog.setCancelable(false);
+            dialog.show();
 
-        // Create an AnimatorSet to synchronize animations
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(fadeOutAnimator, editTextFadeOutAnimator, addTaskBtnFadeOutAnimator);
-
-        // Start the fade-out animations
-        animatorSet.start();
+            // Find the cancel button inside the dialog view
+            ShapeableImageView addTask_Btn_cancel = myView.findViewById(R.id.addTask_Btn_cancel);
+            categorySpinner = myView.findViewById(R.id.task_format_category_spinner);
+            task_format_description = myView.findViewById(R.id.task_format_description);
+            task_format_date = myView.findViewById(R.id.task_format_date);
 
 
+
+            addTask_Btn_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Dismiss the dialog
+                    dialog.dismiss();
+                }
+            });
+
+            AppCompatButton addTask_BTN_confirm = myView.findViewById(R.id.addTask_BTN_confirm);
+
+            addTask_BTN_confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    addTaskOnClickListener();
+                }
+            });
+
+
+            });
+
+        ;
     }
+
 
     private void initTaskArray() {
 
@@ -173,15 +233,17 @@ public class TasksFragment extends Fragment {
 
 
 
-    private void addTask(final String newTask) {
+    private void addTask(final String newTask, String category, Date date) {
         // Get the UID of the currently logged-in user
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Get a reference to the user's data in the database
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(userId);
         // Generate a unique ID for the new task
         final String taskId = UUID.randomUUID().toString();
+        String niceDateFormat = formatDate(date);
+
         // Create a new Task object with the provided task description
-        final Task task = new Task(newTask, "category"); // Assuming you have a category for the task
+        final Task task = new Task(newTask,category,niceDateFormat); // Assuming you have a category for the task
         // Get a reference to the tasks node in the user's data
         final DatabaseReference tasksRef = userRef.child("homeData").child("allTasks");
         // Push the new task to the database using the generated task ID
@@ -200,6 +262,10 @@ public class TasksFragment extends Fragment {
                 // Handle any errors that occurred while saving data
             }
         });
+
+        allTaskAsArrayList.add(task);
+        CurrentUser.getInstance().getUserProfile().getHomeData().addTask(task,taskId);
+        adapter.changeArrayTask(allTaskAsArrayList);
     }
 
     private void addTaskToMember(String memberUid, String taskId, Task task) {
@@ -226,6 +292,11 @@ public class TasksFragment extends Fragment {
     public TasksFragment setAllTaskAsArrayList(ArrayList<Task> allTaskAsArrayList) {
         this.allTaskAsArrayList = allTaskAsArrayList;
         return this;
+    }
+
+    private String formatDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return sdf.format(date);
     }
 
 

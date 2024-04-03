@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="items">
+        <item>Cleaning</item>
+        <item>Cooking</item>
+        <item>Laundry</item>
+        <item>Gardening</item>
+        <item>Repairs</item>
+    </string-array>
+</resources>

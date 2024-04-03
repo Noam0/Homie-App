@@ -40,7 +40,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
     @Override
     public TaskAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //inflating the layout, giving the look to each row
-
        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerviewrowtask,parent,false);
         return new TaskAdapter.MyViewHolder(view) ;
     }
@@ -52,7 +51,62 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
             Task currentTask = allTasks.get(position);
             holder.row_RCV_taskDescription.setText(currentTask.getDescription());
             holder.row_RCV_taskCategory.setText(currentTask.getCategory());
+            String[] dateParts = currentTask.getDeadline().split("-");
+            holder.row_RCV_dateDays.setText(dateParts[2]);
+            holder.row_RCV_dateMonths.setText(convertDateFormat(dateParts[1]));
         }
+    }
+
+    private String convertDateFormat(String month) {
+        String newMonth;
+
+        // Convert the numeric month string to an integer
+        int monthNumber = Integer.parseInt(month);
+
+        // Convert the numeric month to its corresponding month name abbreviation
+        switch (monthNumber) {
+            case 1:
+                newMonth = "Jan";
+                break;
+            case 2:
+                newMonth = "Feb";
+                break;
+            case 3:
+                newMonth = "Mar";
+                break;
+            case 4:
+                newMonth = "Apr";
+                break;
+            case 5:
+                newMonth = "May";
+                break;
+            case 6:
+                newMonth = "Jun";
+                break;
+            case 7:
+                newMonth = "Jul";
+                break;
+            case 8:
+                newMonth = "Aug";
+                break;
+            case 9:
+                newMonth = "Sep";
+                break;
+            case 10:
+                newMonth = "Oct";
+                break;
+            case 11:
+                newMonth = "Nov";
+                break;
+            case 12:
+                newMonth = "Dec";
+                break;
+            default:
+                newMonth = "Invalid Month";
+                break;
+        }
+
+        return newMonth;
     }
 
     @Override
@@ -61,30 +115,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
 
     }
 
-    private void changeArrayTask(){
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef = db.getReference("UserInfo").child(CurrentUser.getInstance().getUid()).child("homeData");
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    HomeData homeData = snapshot.getValue(HomeData.class);
-                    if (homeData != null) {
-
-                        allTasks = homeData.convertTasksToList();
-
-                    }
-                } else {
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle errors
-            }
-        });
+    public void changeArrayTask(ArrayList<Task> modifiedAllTasks){
+        this.allTasks = modifiedAllTasks;
+        notifyDataSetChanged();
     }
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
        TextView row_RCV_dateMonths;
