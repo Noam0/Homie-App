@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.homie.Adapters.TaskAdapter;
+import com.example.homie.Interfaces.TaskCallBack;
 import com.example.homie.Models.CurrentUser;
 import com.example.homie.Models.HomeData;
 import com.example.homie.Models.Task;
@@ -151,6 +152,14 @@ public class TasksFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         Tasks_RCV_taskRCV.setAdapter(adapter);
         Tasks_RCV_taskRCV.setLayoutManager(linearLayoutManager);
+        adapter.setTaskCallback(new TaskCallBack() {
+            @Override
+            public void editTaskClicked(Task task, int position) {
+                showTaskFormat(task,position);
+
+
+            }
+        });
         initSpinner();
     }
 
@@ -181,6 +190,96 @@ public class TasksFragment extends Fragment {
     }
 
 
+
+    private void showTaskFormat(Task task, int position){
+
+        AlertDialog.Builder myDialogBuilder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View myView = inflater.inflate(R.layout.task_format, null);
+        myDialogBuilder.setView(myView);
+
+        final AlertDialog dialog = myDialogBuilder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+
+        // Find the cancel button inside the dialog view
+        findViewsForDialog(myView);
+
+        task_format_description.setText(task.getDescription());
+        String month[] = task.getDeadline().split("-");
+        int year = Integer.parseInt(month[0]);
+        int monthOfYear = Integer.parseInt(month[1]) - 1; // Subtract 1 because months are 0-indexed in DatePicker
+        int dayOfMonth = Integer.parseInt(month[2]);
+        task_format_date.init(year, monthOfYear, dayOfMonth, null);
+        categorySpinner.setSelection(categoryToInt(task.getCategory()));
+
+
+
+        addTask_Btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Dismiss the dialog
+                dialog.dismiss();
+            }
+        });
+
+        AppCompatButton addTask_BTN_confirm = myView.findViewById(R.id.addTask_BTN_confirm);
+
+        addTask_BTN_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                updateTaskOnClickListener();
+                allTaskAsArrayList.remove(task);
+            }
+        });
+
+
+    }
+
+    private void findViewsForDialog(View myView) {
+        ShapeableImageView addTask_Btn_cancel = myView.findViewById(R.id.addTask_Btn_cancel);
+        categorySpinner = myView.findViewById(R.id.task_format_category_spinner);
+        task_format_description = myView.findViewById(R.id.task_format_description);
+        task_format_date = myView.findViewById(R.id.task_format_date);
+    }
+
+    private void updateTaskOnClickListener() {
+
+
+
+
+    };
+
+
+
+
+
+    private int categoryToInt(String category){
+
+        int categoryNum = 1;
+        switch (category) {
+            case "Cleaning":
+                categoryNum = 0;
+                break;
+            case "Cooking":
+                categoryNum = 1;
+                break;
+            case "Laundry":
+                categoryNum = 2;
+                break;
+            case "Gardening":
+                categoryNum = 3;
+                break;
+            case "Repairs":
+                categoryNum = 4;
+                break;
+            default:
+                categoryNum = 0;
+                break;
+        }
+        return categoryNum;
+    }
     private void initButtonAddAndCancel() {
         Tasks_BTN_add.setOnClickListener(v -> {
             AlertDialog.Builder myDialogBuilder = new AlertDialog.Builder(getActivity());

@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class HomeData {
 
-    private Map<String, Task> allTasks; // Change from ArrayList<Task> to Map<String, Task>
+    private Map<String, Task> allTasks;
 
     private ArrayList<Transaction> transactionsList;
 

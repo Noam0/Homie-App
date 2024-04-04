@@ -23,9 +23,10 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/row_RCV_categoryIMG"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/screwdriver"
+                android:layout_marginStart="6dp"
                 android:layout_gravity="center"
                 >
 
@@ -80,6 +81,7 @@
                     android:textSize="18sp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="3dp"
+                    android:layout_marginEnd="4dp"
                     android:layout_marginTop="18dp"/>
                 <!-- Content for Second Layout -->
 

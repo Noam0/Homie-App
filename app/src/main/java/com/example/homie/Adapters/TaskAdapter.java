@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.homie.Interfaces.TaskCallBack;
 import com.example.homie.Models.CurrentUser;
 import com.example.homie.Models.HomeData;
 import com.example.homie.Models.Task;
@@ -31,11 +32,20 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
 
     private Context context;
     private ArrayList<Task> allTasks;
+    private TaskCallBack taskCallBack;
     public TaskAdapter(Context context, ArrayList<Task> allTasks){
     this.context = context;
     this.allTasks = allTasks;
 
     }
+
+
+
+    public TaskAdapter setTaskCallback(TaskCallBack taskCallback) {
+        this.taskCallBack = taskCallback;
+        return this;
+    }
+
     @NonNull
     @Override
     public TaskAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,6 +64,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
             String[] dateParts = currentTask.getDeadline().split("-");
             holder.row_RCV_dateDays.setText(dateParts[2]);
             holder.row_RCV_dateMonths.setText(convertDateFormat(dateParts[1]));
+
         }
     }
 
@@ -143,13 +154,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
 
     }
 
+    private Task getItem(int position) {
+        return allTasks.get(position);
+    }
+
     public void changeArrayTask(ArrayList<Task> modifiedAllTasks){
         this.allTasks = modifiedAllTasks;
         notifyDataSetChanged();
     }
 
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
        TextView row_RCV_dateMonths;
          TextView row_RCV_dateDays;
         TextView row_RCV_taskDescription;
@@ -164,6 +179,15 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
             row_RCV_categoryIMG= itemView.findViewById(R.id.row_RCV_categoryIMG);
             row_BTN_taskDone= itemView.findViewById(R.id.row_BTN_taskDone);
             row_BTN_taskEdit= itemView.findViewById(R.id.row_BTN_taskEdit);
+            row_BTN_taskEdit.setOnClickListener(v -> {
+
+                if(taskCallBack != null){
+                    taskCallBack.editTaskClicked(getItem(getAdapterPosition()),getAdapterPosition());
+                }
+
+
+
+            });
 
         }
 
