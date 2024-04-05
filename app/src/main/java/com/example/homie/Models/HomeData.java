@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class HomeData {
 
-    private Map<String, Task> allTasks;
+    private ArrayList allTasks;
 
     private ArrayList<Transaction> transactionsList;
 
@@ -18,17 +18,17 @@ public class HomeData {
 
 
     public HomeData() {
-        allTasks = new HashMap<>(); // Initialize as a HashMap
+        allTasks = new ArrayList(); // Initialize as a HashMap
         transactionsList = new ArrayList<>();
         eventsList = new ArrayList<>();
         groceryItemsList = new ArrayList<>();
     }
 
-    public Map<String , Task> getAllTasks() {
+    public ArrayList<Task> getAllTasks() {
         return allTasks;
     }
 
-    public void setAllTasks(Map<String, Task> allTasks) {
+    public void setAllTasks(ArrayList<Task> allTasks) {
         this.allTasks = allTasks;
     }
 
@@ -58,8 +58,8 @@ public class HomeData {
 
 
 
-    public void addTask(Task task,String taskId){
-        allTasks.put(taskId,task);
+    public void addTask(Task task){
+        allTasks.add(task);
 
     }
 
@@ -73,8 +73,5 @@ public class HomeData {
                 '}';
     }
 
-    public ArrayList<Task> convertTasksToList() {
-        ArrayList<Task> taskList = new ArrayList<>(allTasks.values());
-        return taskList;
-    }
+
 }

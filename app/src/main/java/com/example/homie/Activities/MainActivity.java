@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new BudgetFragment());
             } else if (item.getItemId() == R.id.task) {
                 ArrayList<Task> allTaskAsArrayList = new ArrayList<Task>();
-                allTaskAsArrayList = CurrentUser.getInstance().getUserProfile().getHomeData().convertTasksToList();
+                allTaskAsArrayList = CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks();
                 TasksFragment tasksFragment = new TasksFragment(allTaskAsArrayList);
                 replaceFragment(tasksFragment);
             } else if (item.getItemId() == R.id.calendar) {

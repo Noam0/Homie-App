@@ -213,7 +213,7 @@ public class TasksFragment extends Fragment {
         task_format_date.init(year, monthOfYear, dayOfMonth, null);
         categorySpinner.setSelection(categoryToInt(task.getCategory()));
 
-
+        addTask_Btn_cancel = myView.findViewById(R.id.addTask_Btn_cancel);
 
         addTask_Btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,12 +229,30 @@ public class TasksFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                updateTaskOnClickListener();
-                allTaskAsArrayList.remove(task);
+                String category = getTaskCategoryFromSpinner();//getting category
+                Date taskDeadline = new Date();
+                taskDeadline = getDeadline();//getting date
+                String taskDescription = "";
+                taskDescription = GetTaskDescription();
+                task_format_description.setText("");
+                updateTask(task,position,category,taskDescription,taskDeadline);
+
+
             }
         });
 
 
+    }
+
+    private void updateTask(Task task, int position, String newCategory, String newDescription, Date newDate) {
+
+        String niceDateFormat = formatDate(newDate);
+        CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().get(position)
+                .setDescription(newDescription)
+                .setDeadline(niceDateFormat)
+                .setCategory(newCategory);
+
+        updateDataBaseTasks();
     }
 
     private void findViewsForDialog(View myView) {
@@ -244,12 +262,7 @@ public class TasksFragment extends Fragment {
         task_format_date = myView.findViewById(R.id.task_format_date);
     }
 
-    private void updateTaskOnClickListener() {
 
-
-
-
-    };
 
 
 
@@ -327,53 +340,41 @@ public class TasksFragment extends Fragment {
     private void initTaskArray() {
 
         allTaskAsArrayList = new ArrayList<Task>();
-        allTaskAsArrayList = CurrentUser.getInstance().getUserProfile().getHomeData().convertTasksToList();
+        allTaskAsArrayList = CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks();
         }
 
 
 
     private void addTask(final String newTask, String category, Date date) {
-        // Get the UID of the currently logged-in user
+
+        String niceDateFormat = formatDate(date);
+        final Task task = new Task(newTask,category,niceDateFormat);
+
+        CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().add(task);
+
+        updateDataBaseTasks();
+
+
+
+
+    }
+
+    private void updateDataBaseTasks() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Get a reference to the user's data in the database
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(userId);
-        // Generate a unique ID for the new task
-        final String taskId = UUID.randomUUID().toString();
-        String niceDateFormat = formatDate(date);
-
-        // Create a new Task object with the provided task description
-        final Task task = new Task(newTask,category,niceDateFormat); // Assuming you have a category for the task
-        // Get a reference to the tasks node in the user's data
         final DatabaseReference tasksRef = userRef.child("homeData").child("allTasks");
-        // Push the new task to the database using the generated task ID
-        tasksRef.child(taskId).setValue(task).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                // Data successfully saved to the database
-                // Now, for each existing member in the list, add the new task to their list
-                for (String memberUid : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()) {
-                    addTaskToMember(memberUid, taskId, task);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // Handle any errors that occurred while saving data
-            }
-        });
 
-        allTaskAsArrayList.add(task);
-        CurrentUser.getInstance().getUserProfile().getHomeData().addTask(task,taskId);
+        tasksRef.setValue( CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks());
+
+        for(String homeMember : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()){
+            DatabaseReference memRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(homeMember);
+            DatabaseReference memtasksRef = memRef.child("homeData").child("allTasks");
+            memtasksRef.setValue(CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks());
+
+        }
+
         adapter.changeArrayTask(allTaskAsArrayList);
-    }
-
-    private void addTaskToMember(String memberUid, String taskId, Task task) {
-        // Get a reference to the member's data location
-        DatabaseReference memberRef = FirebaseDatabase.getInstance().getReference().child("UserInfo").child(memberUid);
-        // Get a reference to the tasks node in the member's data
-        DatabaseReference tasksRef = memberRef.child("homeData").child("allTasks");
-        // Push the new task to the member's list of tasks
-        tasksRef.child(taskId).setValue(task);
 
     }
 
