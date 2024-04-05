@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.homie.Models.CurrentUser;
+import com.example.homie.Models.HomeData;
 import com.example.homie.R;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.database.DataSnapshot;
@@ -112,13 +113,18 @@ public class addHomeMemberActivity extends AppCompatActivity {
                     if (snapshot.exists()) {
                         String scannedUserName = snapshot.child("name").getValue(String.class);
                         String scannedUrl = snapshot.child("image").getValue(String.class);
+                        //HomeData memberHomeData = snapshot.child("HomeData").getValue(HomeData.class);
                         showScannedUserData(scannedUserName, scannedUrl);
                         CurrentUser.getInstance().getUserProfile().addHomeMember(finalScannedUID);
+
+                        //synchHomeMembersData(finalScannedUID,memberHomeData);
                         //addHomeMemberUseScanned(scannedUID);
                     } else {
                         showErrorMessage("User not found in the database.");
                     }
                 }
+
+
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -128,6 +134,14 @@ public class addHomeMemberActivity extends AppCompatActivity {
         }
         this.scannedUIDToGoBackWithToMainActivity = scannedUID;
     });
+
+    private void synchHomeMembersData(String scannedUID, HomeData newHomeData) {
+
+
+
+
+
+    }
 
     private void showScannedUserData(String userName, String imageUrl) {
         AlertDialog.Builder builder = new AlertDialog.Builder(addHomeMemberActivity.this);
