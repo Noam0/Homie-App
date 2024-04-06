@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/diaglog_user_info_headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

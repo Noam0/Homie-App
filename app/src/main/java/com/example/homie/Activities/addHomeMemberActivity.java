@@ -39,6 +39,7 @@ public class addHomeMemberActivity extends AppCompatActivity {
     private MaterialTextView AMA_MTV_scan;
     private String userUID;
 
+    private MaterialTextView diaglog_user_info_headline;
     private String scannedUIDToGoBackWithToMainActivity;
 
     private AppCompatButton SCAN_ACB_goBack;
@@ -114,8 +115,14 @@ public class addHomeMemberActivity extends AppCompatActivity {
                         String scannedUserName = snapshot.child("name").getValue(String.class);
                         String scannedUrl = snapshot.child("image").getValue(String.class);
                         //HomeData memberHomeData = snapshot.child("HomeData").getValue(HomeData.class);
-                        showScannedUserData(scannedUserName, scannedUrl);
-                        CurrentUser.getInstance().getUserProfile().addHomeMember(finalScannedUID);
+                        if (CurrentUser.getInstance().getUserProfile().getHomeMembersUid().contains(finalScannedUID)){
+
+                            showScannedUserData(scannedUserName, scannedUrl,false);
+                        }else {
+                            CurrentUser.getInstance().getUserProfile().addHomeMember(finalScannedUID);
+                            showScannedUserData(scannedUserName, scannedUrl,true);
+                        }
+
 
                         //synchHomeMembersData(finalScannedUID,memberHomeData);
                         //addHomeMemberUseScanned(scannedUID);
@@ -143,7 +150,7 @@ public class addHomeMemberActivity extends AppCompatActivity {
 
     }
 
-    private void showScannedUserData(String userName, String imageUrl) {
+    private void showScannedUserData(String userName, String imageUrl ,boolean succesfull) {
         AlertDialog.Builder builder = new AlertDialog.Builder(addHomeMemberActivity.this);
 
         // Inflate custom layout for the dialog
@@ -159,6 +166,11 @@ public class addHomeMemberActivity extends AppCompatActivity {
 
         // Set custom view to the dialog
         builder.setView(dialogView);
+
+       if(!succesfull){
+          diaglog_user_info_headline = dialogView.findViewById(R.id.diaglog_user_info_headline);
+          diaglog_user_info_headline.setText("already your home member");
+        }
 
         // Set positive button
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss()).show();

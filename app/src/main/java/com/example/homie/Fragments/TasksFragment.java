@@ -46,9 +46,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -70,6 +73,9 @@ public class TasksFragment extends Fragment {
 
     private DatePicker task_format_date;
 
+    private AppCompatButton buttonDeadline;
+    private AppCompatButton buttonCategory;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,6 +95,8 @@ public class TasksFragment extends Fragment {
         Tasks_BTN_add = view.findViewById(R.id.Tasks_BTN_add);
         addTask_Btn_cancel = view.findViewById(R.id.addTask_Btn_cancel);
         categorySpinner = view.findViewById(R.id.task_format_category_spinner);
+        buttonDeadline = view.findViewById(R.id.buttonDeadline);
+        buttonCategory = view.findViewById(R.id.buttonCategory);
 
 
 
@@ -156,12 +164,22 @@ public class TasksFragment extends Fragment {
             @Override
             public void editTaskClicked(Task task, int position) {
                 showTaskFormat(task,position);
+                Log.d("imrighthere167", "taskCheckedClicked: ");
 
+            }
+
+            @Override
+            public void taskCheckedClicked(Task task, int position) {
+                taskCheckedUpdate(task,position);
+                Log.d("imrighthere174", "taskCheckedClicked: ");
 
             }
         });
         initSpinner();
+        initSortingButtons();
     }
+
+
 
     private void initSpinner() {
         // Inflate the layout containing the Spinner
@@ -400,7 +418,70 @@ public class TasksFragment extends Fragment {
     }
 
 
+    //Sorting Methods
+    private void sortByCategory() {
+        Collections.sort(allTaskAsArrayList, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                return task1.getCategory().compareTo(task2.getCategory());
+            }
+        });
+        adapter.notifyDataSetChanged(); // Notify adapter of data change
+    }
+    private void sortByDeadline() {
+        Collections.sort(allTaskAsArrayList, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                // Parse deadline strings to Date objects
+                Date date1 = parseDate(task1.getDeadline());
+                Date date2 = parseDate(task2.getDeadline());
+                // Compare Date objects
+                return date1.compareTo(date2);
+            }
+        });
+        adapter.notifyDataSetChanged(); // Notify adapter of data change
+    }
 
+    // Helper method to parse deadline string to Date object
+    private Date parseDate(String deadline) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            return sdf.parse(deadline);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private void initSortingButtons() {
+
+        buttonCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortByCategory();
+            }
+        });
+
+        buttonDeadline.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                sortByDeadline();
+            }
+        });
+    }
+
+    private void taskCheckedUpdate(Task task, int position) {
+        if(task.isDone()){
+          task.setDone(false);
+        }else{
+            task.setDone(true);
+        }
+        CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().set(position,task);
+        adapter.notifyDataSetChanged();
+        updateDataBaseTasks();
+        Log.d("imrighthere481", "taskCheckedUpdate: ");
+
+    }
 
 
 

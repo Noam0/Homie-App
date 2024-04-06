@@ -1,9 +1,11 @@
 package com.example.homie.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -64,6 +66,24 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
             String[] dateParts = currentTask.getDeadline().split("-");
             holder.row_RCV_dateDays.setText(dateParts[2]);
             holder.row_RCV_dateMonths.setText(convertDateFormat(dateParts[1]));
+            if(currentTask.isDone()){
+                holder.row_SIV_Check.setVisibility(View.VISIBLE);
+            }else{
+                holder.row_SIV_Check.setVisibility(View.INVISIBLE);
+            }
+
+            holder.row_BTN_taskDone.setOnClickListener(v->{
+                if(!currentTask.isDone()){
+                    holder.row_SIV_Check.setVisibility(View.VISIBLE);
+                    currentTask.setDone(true);
+                }else{
+                    holder.row_SIV_Check.setVisibility(View.INVISIBLE);
+                    currentTask.setDone(false);
+                }
+
+
+
+            });
 
         }
     }
@@ -171,6 +191,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
         ShapeableImageView row_RCV_categoryIMG;
         ShapeableImageView row_BTN_taskDone;
         ShapeableImageView row_BTN_taskEdit;
+        ShapeableImageView row_SIV_Check;
+
+        FrameLayout Task_FL_checker;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             row_RCV_dateMonths = itemView.findViewById(R.id.row_RCV_dateMonths);
@@ -179,6 +203,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
             row_RCV_categoryIMG= itemView.findViewById(R.id.row_RCV_categoryIMG);
             row_BTN_taskDone= itemView.findViewById(R.id.row_BTN_taskDone);
             row_BTN_taskEdit= itemView.findViewById(R.id.row_BTN_taskEdit);
+            row_SIV_Check = itemView.findViewById(R.id.row_SIV_check);
+            Task_FL_checker = itemView.findViewById(R.id.Task_FL_checker);
+
             row_BTN_taskEdit.setOnClickListener(v -> {
 
                 if(taskCallBack != null){
@@ -188,6 +215,27 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
 
 
             });
+
+            row_BTN_taskDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(taskCallBack != null){
+                        taskCallBack.taskCheckedClicked(getItem(getAdapterPosition()),getAdapterPosition());
+                    }
+                }
+            });
+
+            Task_FL_checker.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(taskCallBack != null){
+                        taskCallBack.taskCheckedClicked(getItem(getAdapterPosition()),getAdapterPosition());
+                    }
+                }
+            });
+
+
+
 
         }
 

@@ -19,6 +19,7 @@ public class Task {
         this.description = description;
         this.category = category;
         this.deadline = deadline;
+        this.done = false;
     }
 
     public String getDescription() {
