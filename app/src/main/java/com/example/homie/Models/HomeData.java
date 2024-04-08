@@ -62,7 +62,10 @@ public class HomeData {
         allTasks.add(task);
 
     }
+    public void addTransaction(Transaction transaction){
+        allTasks.add(transaction);
 
+    }
     @Override
     public String toString() {
         return "HomeData{" +

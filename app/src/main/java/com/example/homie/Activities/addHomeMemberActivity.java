@@ -15,9 +15,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.homie.Models.CurrentUser;
+import com.example.homie.Models.GroceryItem;
 import com.example.homie.Models.HomeData;
+import com.example.homie.Models.Task;
+import com.example.homie.Models.Transaction;
 import com.example.homie.R;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +38,10 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class addHomeMemberActivity extends AppCompatActivity {
@@ -43,6 +53,9 @@ public class addHomeMemberActivity extends AppCompatActivity {
     private String scannedUIDToGoBackWithToMainActivity;
 
     private AppCompatButton SCAN_ACB_goBack;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase firebaseDB = FirebaseDatabase.getInstance();
+
 
 
     @Override
@@ -114,18 +127,19 @@ public class addHomeMemberActivity extends AppCompatActivity {
                     if (snapshot.exists()) {
                         String scannedUserName = snapshot.child("name").getValue(String.class);
                         String scannedUrl = snapshot.child("image").getValue(String.class);
-                        //HomeData memberHomeData = snapshot.child("HomeData").getValue(HomeData.class);
+                        HomeData memberHomeData = snapshot.child("HomeData").getValue(HomeData.class);
                         if (CurrentUser.getInstance().getUserProfile().getHomeMembersUid().contains(finalScannedUID)){
 
                             showScannedUserData(scannedUserName, scannedUrl,false);
                         }else {
                             CurrentUser.getInstance().getUserProfile().addHomeMember(finalScannedUID);
                             showScannedUserData(scannedUserName, scannedUrl,true);
+                           // combineHomeData(memberHomeData);
+
                         }
 
 
-                        //synchHomeMembersData(finalScannedUID,memberHomeData);
-                        //addHomeMemberUseScanned(scannedUID);
+
                     } else {
                         showErrorMessage("User not found in the database.");
                     }
@@ -142,13 +156,35 @@ public class addHomeMemberActivity extends AppCompatActivity {
         this.scannedUIDToGoBackWithToMainActivity = scannedUID;
     });
 
-    private void synchHomeMembersData(String scannedUID, HomeData newHomeData) {
+    private void combineHomeData(HomeData memberHomeData) {
+        if(memberHomeData.getAllTasks() != null) {
+            ArrayList<Task> newMemberAllTasks = memberHomeData.getAllTasks();
+            for (Task task : newMemberAllTasks) {
+                CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().add(task);
 
+            }
+        }
+            if (memberHomeData.getTransactionsList() != null) {
+                ArrayList<Transaction> newMemberAlltransactions = memberHomeData.getTransactionsList();
+                for (Transaction transaction : newMemberAlltransactions) {
+                    CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList().add(transaction);
 
+                }
+            }
 
+            if (memberHomeData.getGroceryItemsList() != null) {
+                ArrayList<GroceryItem> newMemberAllGroceryItems = memberHomeData.getGroceryItemsList();
+                for (GroceryItem groceryItem : newMemberAllGroceryItems) {
+                    CurrentUser.getInstance().getUserProfile().getHomeData().getGroceryItemsList().add(groceryItem);
+
+                }
+            }
+
+            saveHomeDataToDatabase(CurrentUser.getInstance().getUserProfile().getHomeData());
 
 
     }
+
 
     private void showScannedUserData(String userName, String imageUrl ,boolean succesfull) {
         AlertDialog.Builder builder = new AlertDialog.Builder(addHomeMemberActivity.this);
@@ -189,5 +225,12 @@ public class addHomeMemberActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+    public void saveHomeDataToDatabase(HomeData homeData) {
+
+        DatabaseReference userRef = firebaseDB.getReference("UserInfo").child(CurrentUser.getInstance().getUid());
+        userRef.child("homeData").setValue(homeData);
+    }
+
 
 }

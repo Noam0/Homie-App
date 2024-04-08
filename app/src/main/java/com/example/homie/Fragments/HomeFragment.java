@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.GridLayout;
 import com.example.homie.Activities.addHomeMemberActivity;
 import com.example.homie.Models.CurrentUser;
 import com.example.homie.Models.HomeData;
+import com.example.homie.Models.Transaction;
+import com.example.homie.Models.TransactionType;
 import com.example.homie.Models.User;
 import com.example.homie.R;
 import com.google.android.material.textview.MaterialTextView;
@@ -39,6 +42,9 @@ private CircleImageView circular_image_view;
 
 private CircleImageView[] circularImageViews;
 private GridLayout Home_GridLayout_homeMembers;
+
+private double totalExpensesThisMonth = 0;
+private double totalIncomeThisMonth = 0;
 
 
     public static HomeFragment newInstance(String param1, String param2) {
@@ -75,6 +81,7 @@ private GridLayout Home_GridLayout_homeMembers;
         initHomeDataUi();
         initHomeUserUI();
         initHomeMembersPictures();
+        CalculateOutComeAndIncome();
     }
 
     private void initHomeMembersPictures() {
@@ -213,7 +220,11 @@ private GridLayout Home_GridLayout_homeMembers;
                     if (homeData != null) {
                         String taskCount = String.valueOf(homeData.getAllTasks().size());
                         home_MTV_upComingTask.setText("You have " + taskCount + " upcoming tasks");
+                        CurrentUser.getInstance().getUserProfile().setHomeData(homeData);
+                        //Log.d("IMHERE222", homeData.getAllTasks().toString());
 
+                        //getting All Transactions
+                        loadTransactionsFromSnapshot(snapshot);
 
                     }
                 } else {
@@ -226,6 +237,17 @@ private GridLayout Home_GridLayout_homeMembers;
                 // Handle errors
             }
         });
+    }
+
+
+    private void loadTransactionsFromSnapshot(DataSnapshot snapshot) {
+        DataSnapshot transactionsSnapshot = snapshot.child("allTransactions");
+        ArrayList<Transaction> allTransactions = new ArrayList<>();
+        for (DataSnapshot transactionSnapshot : transactionsSnapshot.getChildren()) {
+            Transaction transaction = transactionSnapshot.getValue(Transaction.class);
+            allTransactions.add(transaction);
+        }
+        CurrentUser.getInstance().getUserProfile().getHomeData().setTransactionsList(allTransactions);
     }
 
 
@@ -242,5 +264,19 @@ private GridLayout Home_GridLayout_homeMembers;
         String[] nameParts = fullName.split(" ");
         String firstName = nameParts[0];
         return firstName;
+    }
+
+
+    private void CalculateOutComeAndIncome() {
+
+        for(Transaction transaction : CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList()){
+            if(transaction.getType() == TransactionType.EXPENSE ){
+                totalExpensesThisMonth += transaction.getAmount();
+            }else{
+                totalIncomeThisMonth += transaction.getAmount();
+
+            }
+        }
+        Log.d("279imhere", "CalculateOutComeAndIncome: " + totalExpensesThisMonth + totalIncomeThisMonth );
     }
 }

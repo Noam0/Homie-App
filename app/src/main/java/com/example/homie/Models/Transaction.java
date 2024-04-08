@@ -6,12 +6,31 @@ public class Transaction {
 
     private double amount;
     private String description;
-    private String category;
-    private Date date;
+
+    private String date;
     private TransactionType type;
+
+    private String urlImageOfTransactionMaker;
 
     public Transaction(){
 
+    }
+
+    public Transaction(double amount, String description, String date, TransactionType type, String urlImageOfTransactionMaker) {
+        this.amount = amount;
+        this.description = description;
+        this.date = date;
+        this.type = type;
+        this.urlImageOfTransactionMaker = urlImageOfTransactionMaker;
+    }
+
+    public String getUrlImageOfTransactionMaker() {
+        return urlImageOfTransactionMaker;
+    }
+
+    public Transaction setUrlImageOfTransactionMaker(String uidOfTransactionMaker) {
+        this.urlImageOfTransactionMaker = uidOfTransactionMaker;
+        return this;
     }
 
     public double getAmount() {
@@ -32,20 +51,13 @@ public class Transaction {
         return this;
     }
 
-    public String getCategory() {
-        return category;
-    }
 
-    public Transaction setCategory(String category) {
-        this.category = category;
-        return this;
-    }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public Transaction setDate(Date date) {
+    public Transaction setDate(String date) {
         this.date = date;
         return this;
     }

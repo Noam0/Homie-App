@@ -164,14 +164,14 @@ public class TasksFragment extends Fragment {
             @Override
             public void editTaskClicked(Task task, int position) {
                 showTaskFormat(task,position);
-                Log.d("imrighthere167", "taskCheckedClicked: ");
+
 
             }
 
             @Override
             public void taskCheckedClicked(Task task, int position) {
                 taskCheckedUpdate(task,position);
-                Log.d("imrighthere174", "taskCheckedClicked: ");
+
 
             }
         });
