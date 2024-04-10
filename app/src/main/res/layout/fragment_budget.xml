@@ -128,7 +128,7 @@
         android:layout_height="50dp"
         android:src="@drawable/add_icon"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="80dp">
 
     </com.google.android.material.imageview.ShapeableImageView>
 

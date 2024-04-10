@@ -14,6 +14,7 @@ import android.widget.GridLayout;
 
 import com.example.homie.Activities.addHomeMemberActivity;
 import com.example.homie.Models.CurrentUser;
+import com.example.homie.Models.GroceryItem;
 import com.example.homie.Models.HomeData;
 import com.example.homie.Models.Transaction;
 import com.example.homie.Models.TransactionType;
@@ -46,6 +47,11 @@ private GridLayout Home_GridLayout_homeMembers;
 private double totalExpensesThisMonth = 0;
 private double totalIncomeThisMonth = 0;
 
+    private MaterialTextView Home_MTV_monthlyIncome;
+    private MaterialTextView Home_MTV_monthlyExpense;
+    private MaterialTextView Home_MTV_monthlyTotal ;
+
+    private MaterialTextView home_MTV_GroceryItems;
 
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
@@ -69,9 +75,15 @@ private double totalIncomeThisMonth = 0;
 
     private void findViews(View view) {
         home_MTV_upComingTask = view.findViewById(R.id.home_MTV_upComingTask);
-        circular_image_view = view.findViewById(R.id.circular_image_view);
+        circular_image_view = view.findViewById
+                (R.id.circular_image_view);
         home_MTV_UserName = view.findViewById(R.id.home_MTV_UserName);
         Home_GridLayout_homeMembers = view.findViewById(R.id.Home_GridLayout_homeMembers);
+
+        Home_MTV_monthlyIncome  = view.findViewById(R.id.Home_MTV_monthlyIncome);
+        Home_MTV_monthlyExpense = view.findViewById(R.id.Home_MTV_monthlyExpense);
+        Home_MTV_monthlyTotal = view.findViewById(R.id.Home_MTV_monthlyTotal);
+        home_MTV_GroceryItems = view.findViewById(R.id.home_MTV_GroceryItems);
 
     }
 
@@ -81,7 +93,15 @@ private double totalIncomeThisMonth = 0;
         initHomeDataUi();
         initHomeUserUI();
         initHomeMembersPictures();
-        CalculateOutComeAndIncome();
+
+    }
+
+    private void InitViewsOfIncomeAndExpense() {
+        Home_MTV_monthlyIncome.setText(totalIncomeThisMonth +"");
+        Home_MTV_monthlyExpense.setText(totalExpensesThisMonth+"");
+        double total = totalIncomeThisMonth - totalExpensesThisMonth;
+        Home_MTV_monthlyTotal.setText(total +"");
+
     }
 
     private void initHomeMembersPictures() {
@@ -194,6 +214,9 @@ private double totalIncomeThisMonth = 0;
                     if (user != null) {
                         loadingImageUrl();
                         home_MTV_UserName.setText(setFirstNameOfUser(user.getName()));
+                        CalculateExpenseAndIncome();
+                        InitViewsOfIncomeAndExpense();
+
                     }
                 } else {
                     // Handle case where the data doesn't exist
@@ -205,6 +228,8 @@ private double totalIncomeThisMonth = 0;
                 // Handle errors
             }
         });
+
+
     }
 
 
@@ -225,6 +250,9 @@ private double totalIncomeThisMonth = 0;
 
                         //getting All Transactions
                         loadTransactionsFromSnapshot(snapshot);
+                        loadGroceriesFromSnapshot(snapshot);
+
+                        initNumberOfItmesInShopView();
 
                     }
                 } else {
@@ -239,6 +267,20 @@ private double totalIncomeThisMonth = 0;
         });
     }
 
+    private void initNumberOfItmesInShopView() {
+
+        int numberOfItems = 0;
+
+        for(GroceryItem groceryItem : CurrentUser.getInstance().getUserProfile().getHomeData().getGroceryItemsList()){
+            if(!groceryItem.isWasBought())
+                numberOfItems++;
+        }
+
+        home_MTV_GroceryItems.setText(numberOfItems + " items in shopping list ");
+
+
+    }
+
 
     private void loadTransactionsFromSnapshot(DataSnapshot snapshot) {
         DataSnapshot transactionsSnapshot = snapshot.child("allTransactions");
@@ -248,6 +290,17 @@ private double totalIncomeThisMonth = 0;
             allTransactions.add(transaction);
         }
         CurrentUser.getInstance().getUserProfile().getHomeData().setTransactionsList(allTransactions);
+    }
+
+
+    private void loadGroceriesFromSnapshot(DataSnapshot snapshot) {
+        DataSnapshot grocerysSnapshot = snapshot.child("allGroceries");
+        ArrayList<GroceryItem> allGroceries = new ArrayList<>();
+        for (DataSnapshot groceryItemSnapshot : grocerysSnapshot.getChildren()) {
+            GroceryItem groceryItem = groceryItemSnapshot.getValue(GroceryItem.class);
+            allGroceries.add(groceryItem);
+        }
+        CurrentUser.getInstance().getUserProfile().getHomeData().setGroceryItemsList(allGroceries);
     }
 
 
@@ -267,7 +320,7 @@ private double totalIncomeThisMonth = 0;
     }
 
 
-    private void CalculateOutComeAndIncome() {
+    private void CalculateExpenseAndIncome() {
 
         for(Transaction transaction : CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList()){
             if(transaction.getType() == TransactionType.EXPENSE ){
@@ -277,6 +330,5 @@ private double totalIncomeThisMonth = 0;
 
             }
         }
-        Log.d("279imhere", "CalculateOutComeAndIncome: " + totalExpensesThisMonth + totalIncomeThisMonth );
     }
 }

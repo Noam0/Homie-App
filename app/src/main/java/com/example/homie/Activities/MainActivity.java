@@ -17,6 +17,7 @@ import com.example.homie.Fragments.HomeFragment;
 import com.example.homie.Fragments.ShoppingFragment;
 import com.example.homie.Fragments.TasksFragment;
 import com.example.homie.Models.CurrentUser;
+import com.example.homie.Models.GroceryItem;
 import com.example.homie.Models.HomeData;
 import com.example.homie.Models.Task;
 import com.example.homie.Models.Transaction;
@@ -63,7 +64,10 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.home) {
                 replaceFragment(new HomeFragment());
             } else if (item.getItemId() == R.id.shopping) {
-                replaceFragment(new ShoppingFragment());
+                ArrayList<GroceryItem> allGroceries = new ArrayList<GroceryItem>();
+                allGroceries = CurrentUser.getInstance().getUserProfile().getHomeData().getGroceryItemsList();
+                ShoppingFragment shoppingFragment = new ShoppingFragment(allGroceries);
+                replaceFragment(shoppingFragment);
             } else if (item.getItemId() == R.id.budget) {
                 ArrayList<Transaction> allTransactionsList = new ArrayList<Transaction>();
                 allTransactionsList = CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList();

@@ -2,7 +2,9 @@ package com.example.homie.Fragments;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +40,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,8 +78,11 @@ public class TasksFragment extends Fragment {
 
     private DatePicker task_format_date;
 
-    private AppCompatButton buttonDeadline;
-    private AppCompatButton buttonCategory;
+    private MaterialTextView buttonDeadline;
+    private MaterialTextView buttonCategory;
+
+    private MaterialTextView Task_MTV_done;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,7 +105,7 @@ public class TasksFragment extends Fragment {
         categorySpinner = view.findViewById(R.id.task_format_category_spinner);
         buttonDeadline = view.findViewById(R.id.buttonDeadline);
         buttonCategory = view.findViewById(R.id.buttonCategory);
-
+        Task_MTV_done = view.findViewById(R.id.Task_MTV_done);
 
 
 
@@ -160,6 +168,10 @@ public class TasksFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         Tasks_RCV_taskRCV.setAdapter(adapter);
         Tasks_RCV_taskRCV.setLayoutManager(linearLayoutManager);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(Tasks_RCV_taskRCV);
+
+
         adapter.setTaskCallback(new TaskCallBack() {
             @Override
             public void editTaskClicked(Task task, int position) {
@@ -392,7 +404,7 @@ public class TasksFragment extends Fragment {
 
         }
 
-        adapter.changeArrayTask(allTaskAsArrayList);
+        adapter.changeArrayTask(CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks());
 
     }
 
@@ -455,8 +467,13 @@ public class TasksFragment extends Fragment {
     private void initSortingButtons() {
 
         buttonCategory.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+
+                buttonCategory.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
+                buttonDeadline.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                Task_MTV_done.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
                 sortByCategory();
             }
         });
@@ -465,10 +482,45 @@ public class TasksFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
+                buttonCategory.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonDeadline.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
+                Task_MTV_done.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+
                 sortByDeadline();
             }
         });
+
+        Task_MTV_done.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                buttonCategory.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonDeadline.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                Task_MTV_done.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
+                sortByFinished();
+            }
+        });
     }
+
+    private void sortByFinished() {
+        Collections.sort(allTaskAsArrayList, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                // Compare tasks based on their done status
+                if (task1.isDone() && !task2.isDone()) {
+                    return 1; // task1 is done, task2 is not done, so task1 comes after task2
+                } else if (!task1.isDone() && task2.isDone()) {
+                    return -1; // task1 is not done, task2 is done, so task1 comes before task2
+                } else {
+                    return 0; // Both tasks have the same done status, maintain their original order
+                }
+            }
+        });
+
+        adapter.notifyDataSetChanged(); // Notify adapter of data change
+    }
+
+
 
     private void taskCheckedUpdate(Task task, int position) {
         if(task.isDone()){
@@ -485,5 +537,36 @@ public class TasksFragment extends Fragment {
 
 
 
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0 , ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            final Task deletedTask = CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().remove(position);
+            updateDataBaseTasks();
+            allTaskAsArrayList.remove(position);
+            adapter.notifyDataSetChanged();
+
+            View rootView = getView();
+
+            Snackbar.make(rootView, "Task deleted", Snackbar.LENGTH_LONG)
+                    .setAction("Undo", new View.OnClickListener() {
+                        @SuppressLint("NotifyDataSetChanged")
+                        @Override
+                        public void onClick(View view) {
+
+                            CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().add(position, deletedTask);
+                            allTaskAsArrayList.add(position,deletedTask);
+                            updateDataBaseTasks();
+                            adapter.notifyDataSetChanged();
+                        }
+                    })
+                    .show();
+        }};
 
 }

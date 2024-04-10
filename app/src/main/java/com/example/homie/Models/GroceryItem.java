@@ -2,11 +2,47 @@ package com.example.homie.Models;
 
 public class GroceryItem {
     private String name;
-    private double price;
-    private String category;
 
+    private boolean wasBought;
+
+    private String urlImageOfTransactionMaker;
+
+    private int amount;
     public GroceryItem(){
 
+    }
+
+    public GroceryItem(String name,int amount, String urlImageOfTransactionMaker) {
+        this.name = name;
+        this.amount = amount;
+        this.urlImageOfTransactionMaker = urlImageOfTransactionMaker;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public GroceryItem setAmount(int amount) {
+        this.amount = amount;
+        return this;
+    }
+
+    public String getUrlImageOfTransactionMaker() {
+        return urlImageOfTransactionMaker;
+    }
+
+    public GroceryItem setUrlImageOfTransactionMaker(String urlImageOfTransactionMaker) {
+        this.urlImageOfTransactionMaker = urlImageOfTransactionMaker;
+        return this;
+    }
+
+    public boolean isWasBought() {
+        return wasBought;
+    }
+
+    public GroceryItem setWasBought(boolean wasBought) {
+        this.wasBought = wasBought;
+        return this;
     }
 
     public String getName() {
@@ -18,21 +54,7 @@ public class GroceryItem {
         return this;
     }
 
-    public double getPrice() {
-        return price;
-    }
 
-    public GroceryItem setPrice(double price) {
-        this.price = price;
-        return this;
-    }
 
-    public String getCategory() {
-        return category;
-    }
 
-    public GroceryItem setCategory(String category) {
-        this.category = category;
-        return this;
-    }
 }

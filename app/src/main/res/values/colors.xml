@@ -5,5 +5,10 @@
     <color name ="greyLightText">#8e8e8e</color>
     <color name="incomeColor">#E0FFD2</color>
     <color name="expenseColor">#FFADB0</color>
+    <color name="main_green_color">#58A399</color>
+    <color name="clicked_text_color">#A8CD9F</color>
+    <color name="main_blue_color">#496989</color>
+
+
 
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.TasksFragment"
-    android:background="@drawable/backgroundhomie2">
+    android:background="@drawable/backgroundhomie5">
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -26,78 +26,79 @@
             android:layout_height="wrap_content"
             android:text="Home Tasks"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:textSize="30sp"
+            android:layout_marginTop="24dp"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#2D9596"
             android:fontFamily="@font/poppinsmedium"/>
 
     </LinearLayout>
-    <com.google.android.material.textview.MaterialTextView
+
+
+
+
+    <LinearLayout
+        android:id="@+id/sorting_LL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sort by:"
-        app:layout_constraintTop_toBottomOf="@id/Tasks_LL_headline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:fontFamily="@font/poppinsmedium"
-        >
-
-    </com.google.android.material.textview.MaterialTextView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/Tasks_LL_headline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="22dp"
-        android:gravity="center_vertical"
+        android:gravity="center_horizontal"
+
         >
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonDeadline"
+
+
+           <com.google.android.material.textview.MaterialTextView
+               android:id="@+id/buttonDeadline"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:text="Deadline"
+               android:textSize="16sp"
+               android:textColor="#2D9596"
+               android:fontFamily="@font/poppinsmedium"
+               android:textStyle="bold"
+               android:layout_marginHorizontal="12dp"
+               >
+
+           </com.google.android.material.textview.MaterialTextView>
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/buttonCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Category"
+                android:textColor="#2D9596"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppinsmedium"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="12dp"
+                >
+
+            </com.google.android.material.textview.MaterialTextView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/Task_MTV_done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Deadline"
-            android:background="#ADD8E6"
-            android:textColor="#FFFFFF"
+            android:layout_gravity="center"
+            android:text="Finished"
+            android:textColor="#2D9596"
             android:textSize="16sp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="88dp"
-            android:elevation="4dp"
-            android:backgroundTintMode="multiply"
-            android:foreground="?attr/selectableItemBackground"
-            android:outlineProvider="background"
-            android:stateListAnimator="@null"
-        />
+            android:fontFamily="@font/poppinsmedium"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="12dp"
+            >
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:gravity="center"
-            android:layout_toEndOf="@id/buttonDeadline"
-            android:layout_marginStart="20dp"
-            android:background="#ADD8E6"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:elevation="4dp"
-            android:backgroundTintMode="multiply"
-            android:foreground="?attr/selectableItemBackground"
-            android:outlineProvider="background"
-            android:stateListAnimator="@null"
-            /> <!-- Position to the end of the buttonDeadline -->
+        </com.google.android.material.textview.MaterialTextView>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 
@@ -106,14 +107,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Tasks_RCV_taskRCV"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/sorting_LL"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp"
-
-        >
+        android:layout_marginBottom="144dp"
+        android:layout_marginTop="6dp">
 
 
     </androidx.recyclerview.widget.RecyclerView>
@@ -123,11 +123,11 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/Tasks_BTN_add"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/add_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/plus"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="90dp">
 
     </com.google.android.material.imageview.ShapeableImageView>
 

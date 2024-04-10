@@ -26,7 +26,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     private Context context;
     private ArrayList<Transaction> allTransactions;
-
     private TransactionCallBack transactionCallBack;
     //private TransactionCallBack transactionCallBackCallBack;
     public TransactionAdapter(Context context, ArrayList<Transaction> allTransactions){
