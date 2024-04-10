@@ -6,11 +6,10 @@ public class Transaction {
 
     private double amount;
     private String description;
-
     private String date;
     private TransactionType type;
-
     private String urlImageOfTransactionMaker;
+
 
     public Transaction(){
 

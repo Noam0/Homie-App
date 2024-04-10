@@ -3,13 +3,134 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.ShoppingFragment"
-    android:background="#a23231">
+    tools:context=".Fragments.BudgetFragment"
+    android:background="@drawable/backgroundhomie2">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        >
+
+
+        <LinearLayout
+            android:id="@+id/Shopping_LL_headline"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home Shopping List"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textSize="30sp"
+                android:fontFamily="@font/poppinsmedium"/>
+
+        </LinearLayout>
+        <!--
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sort by:"
+            app:layout_constraintTop_toBottomOf="@id/Shopping_LL_headline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/poppinsmedium"
+            >
+
+        </com.google.android.material.textview.MaterialTextView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/Shopping_LL_headline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="22dp"
+            android:gravity="center_vertical"
+            >
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonIncome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Income"
+                android:background="#ADD8E6"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="88dp"
+                android:elevation="4dp"
+                android:backgroundTintMode="multiply"
+                android:foreground="?attr/selectableItemBackground"
+                android:outlineProvider="background"
+                android:stateListAnimator="@null"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonOutCome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Outcome"
+                android:gravity="center"
+                android:layout_toEndOf="@id/buttonIncome"
+                android:layout_marginStart="20dp"
+                android:background="#ADD8E6"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:elevation="4dp"
+                android:backgroundTintMode="multiply"
+                android:foreground="?attr/selectableItemBackground"
+                android:outlineProvider="background"
+                android:stateListAnimator="@null"
+                />  Position to the end of the buttonDeadline
+
+        </RelativeLayout>
+    -->
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Shopping_RCV_transactionRCV"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="40dp"
+
+            >
+
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/Shopping_BTN_add"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/add_icon"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="80dp">
+
+    </com.google.android.material.imageview.ShapeableImageView>
+
 
 </FrameLayout>

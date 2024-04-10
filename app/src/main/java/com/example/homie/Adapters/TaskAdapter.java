@@ -55,7 +55,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder>{
     @Override
     public TaskAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //inflating the layout, giving the look to each row
-       View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerviewrowtask,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerviewrowtask,parent,false);
         return new TaskAdapter.MyViewHolder(view) ;
     }
 

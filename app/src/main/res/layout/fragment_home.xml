@@ -5,9 +5,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.HomeFragment"
-    android:background="@drawable/backgroundhomie2">
+    android:background="@drawable/backgroundhomie3">
 
     <!-- TODO: Update blank fragment layout -->
+
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,11 +26,12 @@
             android:layout_height="55dp"
             android:scaleType="centerCrop"
             android:src="@drawable/profileimagenoam"
-            android:elevation="10dp"
+            android:elevation="6dp"
             android:layout_gravity="end"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="5dp"
-            app:civ_border_color="#ffffff"/>
+            android:layout_marginTop="0dp"
+            app:civ_border_color="#bbeee1"
+            app:civ_border_width="1dp" />
 
     </LinearLayout>
 
@@ -36,7 +41,7 @@
         android:orientation="vertical"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp">
-
+<!--
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,18 +52,21 @@
 
         </com.google.android.material.textview.MaterialTextView>
 
-
+ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hey, "
+            android:text="Welcome Home "
             android:textSize="24sp"
+            android:textStyle="bold"
             android:fontFamily="@font/poppinsmedium"
+            android:textColor="#FFFFFF"
             >
 
         </com.google.android.material.textview.MaterialTextView>
@@ -68,6 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:textSize="24sp"
             android:fontFamily="@font/poppinsmedium">
@@ -86,6 +95,17 @@
 
 
         </LinearLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Have a nice day!"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:fontFamily="@font/poppinsmedium"
+            android:textColor="#FFFFFF"
+            >
+
+        </com.google.android.material.textview.MaterialTextView>
 
 
         </LinearLayout>
@@ -106,17 +126,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnCount="1"
-    android:rowCount="5"
+    android:rowCount="7"
     android:layout_marginTop="80dp">
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Home members"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="10dp"
         android:textStyle="bold"
         android:textSize="15sp"
-        android:fontFamily="@font/poppinsmedium">
+        android:fontFamily="@font/poppinsmedium"
+        android:layout_marginTop="5dp"
+        android:textColor="#ffffff">
 
     </com.google.android.material.textview.MaterialTextView>
 
@@ -139,7 +161,8 @@
             android:layout_marginStart="15dp"
             android:src="@color/black"
             android:layout_marginEnd="5dp"
-            app:civ_border_color="#ffffff"
+            app:civ_border_color="#bbeee1"
+            app:civ_border_width="1dp"
             />
 
 
@@ -152,7 +175,8 @@
             android:layout_marginTop="6dp"
             android:src="@drawable/profileimagenoam"
             android:layout_marginEnd="5dp"
-            app:civ_border_color="#ffffff"/>
+            app:civ_border_color="#bbeee1"
+            app:civ_border_width="1dp"/>
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -161,7 +185,8 @@
             android:layout_gravity="end"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="5dp"
-            app:civ_border_color="#ffffff"/>
+            app:civ_border_color="#bbeee1"
+            app:civ_border_width="1dp"/>
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -170,7 +195,8 @@
             android:layout_gravity="end"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="5dp"
-            app:civ_border_color="#ffffff"/>
+            app:civ_border_color="#bbeee1"
+            app:civ_border_width="1dp"/>
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -179,7 +205,8 @@
             android:layout_gravity="end"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="5dp"
-            app:civ_border_color="#ffffff"/>
+            app:civ_border_color="#bbeee1"
+            app:civ_border_width="1dp"/>
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -188,7 +215,8 @@
             android:layout_gravity="end"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="5dp"
-            app:civ_border_color="#ffffff"/>
+            app:civ_border_color="#bbeee1"
+            app:civ_border_width="1dp"/>
 
 
     </GridLayout>
@@ -216,30 +244,29 @@
         app:cardCornerRadius="15dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="2dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardElevation="4dp"
-        app:contentPadding="3dp">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/task_icon"
-            android:layout_marginTop="4dp"
-            android:layout_marginStart="4dp">
+        app:cardElevation="6dp">
 
-        </com.google.android.material.imageview.ShapeableImageView>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cardviewtaskbackground">
 
-<com.google.android.material.textview.MaterialTextView
-    android:id="@+id/home_MTV_upComingTask"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="You have 0 up coming task"
-    android:textSize="18sp"
-    android:textStyle="bold"
-    android:textAlignment="center"
-    android:layout_gravity="center_vertical"
-    android:gravity="center_horizontal"
-    android:fontFamily="@font/poppinsmedium"/>
 
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/home_MTV_upComingTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fontFamily="@font/poppinsmedium"
+        android:gravity="center"
+        android:text="You have 0 up coming task"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+</RelativeLayout>
     </androidx.cardview.widget.CardView>
 
 
@@ -250,30 +277,208 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="4dp"
-            app:contentPadding="3dp"
-            app:cardBackgroundColor="@color/white">
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/shopping_cart_icon"
-                android:layout_marginTop="4dp"
-                android:layout_marginStart="4dp"/>
+            app:contentPadding="0dp"
+            app:cardElevation="0dp"
+            >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cardviewforgroceryhome">
 
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="You have 0 items in shopping list"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"
-                android:fontFamily="@font/poppinsmedium"/>
 
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fontFamily="@font/poppinsmedium"
+        android:gravity="center_horizontal"
+        android:text="You have 0 items in shopping list"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+</RelativeLayout>
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
+
+
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="325dp"
+            android:columnCount="1"
+            android:rowCount="3">
+
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_weight="5"
+                    android:layout_height="65dp"
+                    app:cardCornerRadius="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="20dp"
+                    app:contentPadding="3dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardElevation="0dp">
+
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/arrowdown"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_marginBottom="10dp">
+                    </com.google.android.material.imageview.ShapeableImageView>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Monthly Expenses"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#ff9169"
+                        android:layout_marginStart="38dp"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="12dp"
+                        android:fontFamily="@font/poppinsmedium"
+                        />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/Home_MTV_monthlyExpense"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="1000"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="#ff9169"
+                        android:layout_marginStart="38dp"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/poppinsmedium"
+                        />
+
+
+
+
+
+                </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_weight="5"
+                android:layout_height="65dp"
+                app:cardCornerRadius="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="20dp"
+                app:contentPadding="3dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="0dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Monthly Income"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#329B80"
+                    android:layout_marginStart="14dp"
+                    android:textAlignment="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/poppinsmedium"
+                    />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/Home_MTV_monthlyIncome"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Monthly Income"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#329B80"
+                    android:layout_marginStart="14dp"
+                    android:textAlignment="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/poppinsmedium"
+                    />
+
+
+
+            </androidx.cardview.widget.CardView>
+
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_weight="5"
+                android:layout_height="65dp"
+                app:cardCornerRadius="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="20dp"
+                app:contentPadding="3dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="0dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Total"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#7b93fe"
+                    android:layout_marginStart="14dp"
+                    android:textAlignment="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/poppinsmedium"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/Home_MTV_monthlyTotal"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Total"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#7b93fe"
+                    android:layout_marginStart="14dp"
+                    android:textAlignment="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/poppinsmedium"
+                    />
+
+
+            </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+        </GridLayout>
+
+
+
+
+
+
+
 
 
 </GridLayout>
