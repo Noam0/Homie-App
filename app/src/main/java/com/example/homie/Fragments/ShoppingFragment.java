@@ -1,6 +1,7 @@
 package com.example.homie.Fragments;
 
 import android.app.AlertDialog;
+import android.graphics.Canvas;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class ShoppingFragment extends Fragment {
 
@@ -388,6 +391,19 @@ public class ShoppingFragment extends Fragment {
                         }
                     })
                     .show();
-        }};
+        }
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getContext(),R.color.delete_red_color))
+                    .addSwipeLeftActionIcon(R.drawable.delete)
+                    .addSwipeLeftLabel("Delete item")
+                    .setSwipeLeftLabelColor(ContextCompat.getColor(getContext(),R.color.white))
+                    .create()
+                    .decorate();
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+
+
+    };
 
 }

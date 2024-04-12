@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.res.ColorStateList;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.homie.Activities.MainActivity;
 import com.example.homie.Adapters.TaskAdapter;
 import com.example.homie.Interfaces.TaskCallBack;
 import com.example.homie.Models.CurrentUser;
@@ -63,6 +65,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class TasksFragment extends Fragment {
 
@@ -549,24 +552,32 @@ public class TasksFragment extends Fragment {
             int position = viewHolder.getAdapterPosition();
             final Task deletedTask = CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().remove(position);
             updateDataBaseTasks();
-            allTaskAsArrayList.remove(position);
             adapter.notifyDataSetChanged();
-
             View rootView = getView();
-
             Snackbar.make(rootView, "Task deleted", Snackbar.LENGTH_LONG)
                     .setAction("Undo", new View.OnClickListener() {
                         @SuppressLint("NotifyDataSetChanged")
                         @Override
                         public void onClick(View view) {
-
                             CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().add(position, deletedTask);
-                            allTaskAsArrayList.add(position,deletedTask);
                             updateDataBaseTasks();
                             adapter.notifyDataSetChanged();
                         }
                     })
                     .show();
-        }};
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getContext(),R.color.delete_red_color))
+                    .addSwipeLeftActionIcon(R.drawable.delete)
+                    .addSwipeLeftLabel("Delete Task")
+                    .setSwipeLeftLabelColor(ContextCompat.getColor(getContext(),R.color.white))
+                    .create()
+                    .decorate();
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
 
 }

@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.budget) {
                 ArrayList<Transaction> allTransactionsList = new ArrayList<Transaction>();
                 allTransactionsList = CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList();
-                Log.d("IMHERE222", allTransactionsList.toString());
                 BudgetFragment budgetFragment = new BudgetFragment(allTransactionsList);
                 replaceFragment(budgetFragment);
             } else if (item.getItemId() == R.id.task) {

@@ -64,5 +64,8 @@ dependencies {
     coreLibraryDesugaring ("com.android.tools:desugar_jdk_libs:2.0.2")
     implementation ("androidx.multidex:multidex:2.0.1")
 
+    //recyclerView swipe:
+    implementation ("it.xabaras.android:recyclerview-swipedecorator:1.4")
+
 
 }

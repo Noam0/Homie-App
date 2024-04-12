@@ -1,25 +1,36 @@
 package com.example.homie.Fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.TextView;
 
+import com.example.homie.Activities.LoginActivity;
+import com.example.homie.Activities.MainActivity;
 import com.example.homie.Activities.addHomeMemberActivity;
 import com.example.homie.Models.CurrentUser;
 import com.example.homie.Models.GroceryItem;
 import com.example.homie.Models.HomeData;
+import com.example.homie.Models.Task;
 import com.example.homie.Models.Transaction;
 import com.example.homie.Models.TransactionType;
 import com.example.homie.Models.User;
 import com.example.homie.R;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,28 +41,37 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class HomeFragment extends Fragment {
 
-private MaterialTextView home_MTV_UserName;
-private MaterialTextView home_MTV_upComingTask;
-private CircleImageView circular_image_view;
+    private MaterialTextView home_MTV_UserName;
+    private MaterialTextView home_MTV_upComingTask;
+    private CircleImageView circular_image_view;
 
-private CircleImageView[] circularImageViews;
-private GridLayout Home_GridLayout_homeMembers;
+    private CircleImageView[] circularImageViews;
+    private GridLayout Home_GridLayout_homeMembers;
 
-private double totalExpensesThisMonth = 0;
-private double totalIncomeThisMonth = 0;
+    private double totalExpensesThisMonth = 0;
+    private double totalIncomeThisMonth = 0;
 
     private MaterialTextView Home_MTV_monthlyIncome;
     private MaterialTextView Home_MTV_monthlyExpense;
     private MaterialTextView Home_MTV_monthlyTotal ;
 
     private MaterialTextView home_MTV_GroceryItems;
+
+    private MaterialTextView home_MTV_date;
+
+    private MaterialTextView diaglog_user_info_headline;
+
+    private ShapeableImageView home_SIV_signOut;
 
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
@@ -71,7 +91,43 @@ private double totalIncomeThisMonth = 0;
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initCurrentUser();
+        initHomeFragmentUI();
 
+    }
+
+    private void initCurrentUser() {
+        // Check if the current user is already initialized
+            // If not initialized, fetch the user data from Firebase
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                String userId = currentUser.getUid();
+                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(userId);
+                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            // User data exists in the database
+                            User user = snapshot.getValue(User.class);
+                            // Set the current user profile in the singleton instance
+                            CurrentUser.getInstance().setUserProfile(user);
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            } else {
+
+            }
+    }
 
     private void findViews(View view) {
         home_MTV_upComingTask = view.findViewById(R.id.home_MTV_upComingTask);
@@ -84,8 +140,11 @@ private double totalIncomeThisMonth = 0;
         Home_MTV_monthlyExpense = view.findViewById(R.id.Home_MTV_monthlyExpense);
         Home_MTV_monthlyTotal = view.findViewById(R.id.Home_MTV_monthlyTotal);
         home_MTV_GroceryItems = view.findViewById(R.id.home_MTV_GroceryItems);
+        home_MTV_date = view.findViewById(R.id.home_MTV_date);
+        home_SIV_signOut = view.findViewById(R.id.home_SIV_signOut);
 
     }
+
 
 
     private void initHomeFragmentUI() {
@@ -93,8 +152,39 @@ private double totalIncomeThisMonth = 0;
         initHomeDataUi();
         initHomeUserUI();
         initHomeMembersPictures();
+        initDate();
+        initOnClickListenerOnImages();
+        initLogOut();
 
     }
+
+    private void initLogOut() {
+        home_SIV_signOut.setOnClickListener(v->{
+            AuthUI.getInstance()
+                    .signOut(getContext())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                            startActivity(new Intent(getActivity(), LoginActivity.class));
+                            getActivity().finish();
+
+                        }
+
+                    });
+        });
+
+    }
+
+
+    private void initDate() {
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        String formattedDate = dateFormat.format(currentDate);
+        home_MTV_date.setText(formattedDate);
+
+    }
+
+
 
     private void InitViewsOfIncomeAndExpense() {
         Home_MTV_monthlyIncome.setText(totalIncomeThisMonth +"");
@@ -330,5 +420,88 @@ private double totalIncomeThisMonth = 0;
 
             }
         }
+    }
+
+    private void showRemoveUserFromHomeDialog(String userUid) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(userUid);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String scannedUserName = snapshot.child("name").getValue(String.class);
+                    String scannedUrl = snapshot.child("image").getValue(String.class);
+
+                    // Create and display the AlertDialog inside onDataChange
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_user_info, null);
+                    diaglog_user_info_headline = dialogView.findViewById(R.id.diaglog_user_info_headline);
+                    diaglog_user_info_headline.setText("Remove From Home?");
+                    CircleImageView userImageView = dialogView.findViewById(R.id.circular_image_view);
+                    Picasso.get().load(scannedUrl).into(userImageView);
+                    TextView userNameTextView = dialogView.findViewById(R.id.userNameTextView);
+                    userNameTextView.setText(scannedUserName);
+
+                    // Add a negative button for removing the user
+                    builder.setNegativeButton("REMOVE", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Handle removal of the user
+                            removeUserFromHome(userUid);
+                        }
+                    });
+
+                    builder.setView(dialogView);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    // Handle case where user data doesn't exist
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle onCancelled event
+            }
+        });
+    }
+
+    private void removeUserFromHome(String userUid) {
+        // Remove the user ID from the end user's home members list
+        DatabaseReference user2Ref = FirebaseDatabase.getInstance().getReference("UserInfo").child(userUid);
+        ArrayList<String> tempUids = new ArrayList<>(CurrentUser.getInstance().getUserProfile().getHomeMembersUid());
+        tempUids.remove(CurrentUser.getInstance().getUid());
+        user2Ref.child("homeMembersUid").setValue(tempUids);
+
+        // Remove the user ID from the main current user's home members list
+        DatabaseReference currentUserRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(CurrentUser.getInstance().getUid());
+        currentUserRef.child("homeMembersUid").child(userUid).removeValue();
+
+        // Update the current user's local homeMembersUid list
+        CurrentUser.getInstance().getUserProfile().getHomeMembersUid().remove(userUid);
+        currentUserRef.child("homeMembersUid").setValue(CurrentUser.getInstance().getUserProfile().getHomeMembersUid());
+
+
+        initHomeFragmentUI();
+    }
+
+    private void initOnClickListenerOnImages() {
+        for (int i = 0; i < circularImageViews.length; i++) {
+            int index = i; // Need to use final or effectively final variable in lambda expression
+            int finalI = i;
+            if(circularImageViews[i]!= null) {
+                circularImageViews[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String memberUid = CurrentUser.getInstance().getUserProfile().getHomeMembersUid().get(finalI);
+                        if(!memberUid.equals(CurrentUser.getInstance().getUid())){
+                            showRemoveUserFromHomeDialog(memberUid);
+                        }
+                    }
+                });
+
+            }
+        }
+
+
     }
 }

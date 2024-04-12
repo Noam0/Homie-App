@@ -11,19 +11,22 @@
 
 
 
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="160dp"
-    app:cardCornerRadius="20dp"
-    app:cardBackgroundColor="#58A399"
-    app:cardElevation="5dp">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/home_SIV_signOut"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/logout"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="14dp">
 
+    </com.google.android.material.imageview.ShapeableImageView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="13dp">
+
 
         <!-- Other views in the LinearLayout -->
 
@@ -43,7 +46,10 @@
     </LinearLayout>
 
 
+
+
     <LinearLayout
+        android:id="@+id/home_LL_headline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="66dp"
@@ -57,7 +63,7 @@
             android:textSize="30sp"
             android:textStyle="bold"
             android:fontFamily="@font/poppinsmedium"
-            android:textColor="@color/white"
+            android:textColor="@color/main_green_color"
 
             >
 
@@ -68,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User"
-            android:textColor="@color/white"
+            android:textColor="@color/main_green_color"
             android:textStyle="bold"
             android:textSize="30sp"
             android:fontFamily="@font/poppinsmedium">
@@ -88,7 +94,25 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/home_MTV_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:fontFamily="@font/poppinsmedium"
+        android:text="14 April 2024"
+        android:textColor="@color/main_green_color"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="22dp">
+
+    </com.google.android.material.textview.MaterialTextView>
+
+
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -225,6 +249,7 @@
         android:layout_gravity="center_horizontal">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/home_CV_tasks"
             android:layout_width="180dp"
             android:layout_height="200dp"
             app:cardCornerRadius="15dp"
@@ -257,6 +282,7 @@
 
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/home_CV_ShoppingList"
             android:layout_width="180dp"
             android:layout_height="200dp"
             app:cardCornerRadius="15dp"

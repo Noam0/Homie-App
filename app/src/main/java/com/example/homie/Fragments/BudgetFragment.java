@@ -1,10 +1,14 @@
 package com.example.homie.Fragments;
 
 import android.app.AlertDialog;
+import android.graphics.Canvas;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,11 +26,13 @@ import com.example.homie.Adapters.TaskAdapter;
 import com.example.homie.Adapters.TransactionAdapter;
 import com.example.homie.Interfaces.TransactionCallBack;
 import com.example.homie.Models.CurrentUser;
+import com.example.homie.Models.GroceryItem;
 import com.example.homie.Models.Task;
 import com.example.homie.Models.Transaction;
 import com.example.homie.Models.TransactionType;
 import com.example.homie.R;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,6 +40,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class BudgetFragment extends Fragment {
     private AppCompatButton buttonIncome;
@@ -82,6 +90,8 @@ public class BudgetFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         Budget_RCV_transactionRCV.setAdapter(adapter);
         Budget_RCV_transactionRCV.setLayoutManager(linearLayoutManager);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(Budget_RCV_transactionRCV);
 
         adapter.setTransactionCallback(new TransactionCallBack() {
             @Override
@@ -355,7 +365,48 @@ public class BudgetFragment extends Fragment {
             }
         });
     }
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0 , ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
 
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            // Remove the item from the list
+            final Transaction deletedItem = CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList().remove(position);
+            updateDataBaseTransaction(CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList());
+            adapter.notifyDataSetChanged();
+
+            // Get the root view of the fragment layout
+            View rootView = getView();
+
+            // Create and show the Snackbar with an action to undo the deletion
+            Snackbar.make(rootView, "Transaction deleted", Snackbar.LENGTH_LONG)
+                    .setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Add the deleted item back to the list at the original position
+                            CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList().add(position, deletedItem);
+                            updateDataBaseTransaction(CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList());
+                            adapter.notifyDataSetChanged();
+                        }
+                    })
+                    .show();
+        }
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getContext(),R.color.delete_red_color))
+                    .addSwipeLeftActionIcon(R.drawable.delete)
+                    .addSwipeLeftLabel("Delete Transaction")
+                    .setSwipeLeftLabelColor(ContextCompat.getColor(getContext(),R.color.white))
+                    .create()
+                    .decorate();
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+
+    };
 
 
 

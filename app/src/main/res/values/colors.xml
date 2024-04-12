@@ -8,7 +8,7 @@
     <color name="main_green_color">#58A399</color>
     <color name="clicked_text_color">#A8CD9F</color>
     <color name="main_blue_color">#496989</color>
-
+    <color name="delete_red_color">#D12626</color>
 
 
 </resources>
