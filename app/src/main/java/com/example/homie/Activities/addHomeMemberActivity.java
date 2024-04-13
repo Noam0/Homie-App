@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +21,7 @@ import com.example.homie.Models.HomeData;
 import com.example.homie.Models.Task;
 import com.example.homie.Models.Transaction;
 import com.example.homie.R;
-import com.google.android.gms.tasks.Tasks;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,8 +40,6 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -62,6 +61,7 @@ public class addHomeMemberActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_home_member);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         findViews();
         userUID = getIntent().getStringExtra("USER_UID");
         try {
@@ -127,25 +127,23 @@ public class addHomeMemberActivity extends AppCompatActivity {
                     if (snapshot.exists()) {
                         String scannedUserName = snapshot.child("name").getValue(String.class);
                         String scannedUrl = snapshot.child("image").getValue(String.class);
-                        HomeData memberHomeData = snapshot.child("HomeData").getValue(HomeData.class);
+                        //HomeData memberHomeData = snapshot.child("homeData").getValue(HomeData.class);
+                        //Log.d("IMHERE133", memberHomeData.toString());
                         if (CurrentUser.getInstance().getUserProfile().getHomeMembersUid().contains(finalScannedUID)){
-
                             showScannedUserData(scannedUserName, scannedUrl,false);
                         }else {
                             CurrentUser.getInstance().getUserProfile().addHomeMember(finalScannedUID);
-                            showScannedUserData(scannedUserName, scannedUrl,true);
-                           // combineHomeData(memberHomeData);
-
+                            showScannedUserData(scannedUserName, scannedUrl, true);
+                            getAllTasksSnapshot();
+                            getAllGroceryItemsSnapshot();
+                            getAllTransactionsSnapshot();
+                            //saveHomeDataToScannedUser();
                         }
-
-
 
                     } else {
                         showErrorMessage("User not found in the database.");
                     }
                 }
-
-
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -156,34 +154,10 @@ public class addHomeMemberActivity extends AppCompatActivity {
         this.scannedUIDToGoBackWithToMainActivity = scannedUID;
     });
 
-    private void combineHomeData(HomeData memberHomeData) {
-        if(memberHomeData.getAllTasks() != null) {
-            ArrayList<Task> newMemberAllTasks = memberHomeData.getAllTasks();
-            for (Task task : newMemberAllTasks) {
-                CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().add(task);
-
-            }
-        }
-            if (memberHomeData.getTransactionsList() != null) {
-                ArrayList<Transaction> newMemberAlltransactions = memberHomeData.getTransactionsList();
-                for (Transaction transaction : newMemberAlltransactions) {
-                    CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList().add(transaction);
-
-                }
-            }
-
-            if (memberHomeData.getGroceryItemsList() != null) {
-                ArrayList<GroceryItem> newMemberAllGroceryItems = memberHomeData.getGroceryItemsList();
-                for (GroceryItem groceryItem : newMemberAllGroceryItems) {
-                    CurrentUser.getInstance().getUserProfile().getHomeData().getGroceryItemsList().add(groceryItem);
-
-                }
-            }
-
-            saveHomeDataToDatabase(CurrentUser.getInstance().getUserProfile().getHomeData());
 
 
-    }
+
+
 
 
     private void showScannedUserData(String userName, String imageUrl ,boolean succesfull) {
@@ -226,11 +200,164 @@ public class addHomeMemberActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void saveHomeDataToDatabase(HomeData homeData) {
 
-        DatabaseReference userRef = firebaseDB.getReference("UserInfo").child(CurrentUser.getInstance().getUid());
-        userRef.child("homeData").setValue(homeData);
+    //COMBINING THE DATA TO THE CURRENT USER CODE:
+    private void getAllTasksSnapshot(){
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(this.scannedUIDToGoBackWithToMainActivity)
+                .child("homeData")
+                .child("allTasks");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
+                        Task task = taskSnapshot.getValue(Task.class);
+                        if (task != null) {
+                            // Add the task to the current user's HomeData
+                            CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks().add(task);
+                        }
+                    }
+                    // Once all tasks are added, save the updated tasks to the database
+                    saveAllTasksToDatabase(CurrentUser.getInstance().getUid());
+                } else {
+                    // Handle case where the allTasks array doesn't exist for the scanned user
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        });
+    }
+    public void saveAllTasksToDatabase(String userId) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(userId).child("homeData").child("allTasks");
+        ArrayList<Task> allTasks = CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks();
+        userRef.setValue(allTasks).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+
+            }
+
+        });
     }
 
 
+    private void getAllTransactionsSnapshot() {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo")
+                .child(scannedUIDToGoBackWithToMainActivity)
+                .child("homeData")
+                .child("allTransactions");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot transactionSnapshot : snapshot.getChildren()) {
+                        Transaction transaction = transactionSnapshot.getValue(Transaction.class);
+                        if (transaction != null) {
+                            // Add the transaction to the current user's HomeData
+                            CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList().add(transaction);
+                        }
+                    }
+                    // Once all transactions are added, save the updated transactions to the database
+                    saveAllTransactionsToDatabase(CurrentUser.getInstance().getUid());
+                } else {
+                    // Handle case where the allTransactions array doesn't exist for the scanned user
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        });
+    }
+    public void saveAllTransactionsToDatabase(String userId) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo")
+                .child(userId)
+                .child("homeData")
+                .child("allTransactions");
+        ArrayList<Transaction> allTransactions = CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList();
+        userRef.setValue(allTransactions).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                // Handle completion if needed
+            }
+        });
+    }
+
+
+
+    private void getAllGroceryItemsSnapshot() {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo")
+                .child(scannedUIDToGoBackWithToMainActivity)
+                .child("homeData")
+                .child("allGroceries");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot groceryItemSnapshot : snapshot.getChildren()) {
+                        GroceryItem groceryItem = groceryItemSnapshot.getValue(GroceryItem.class);
+                        if (groceryItem != null) {
+                            // Add the grocery item to the current user's HomeData
+                            CurrentUser.getInstance().getUserProfile().getHomeData().getGroceryItemsList().add(groceryItem);
+                        }
+                    }
+                    // Once all grocery items are added, save the updated items to the database
+                    saveAllGroceriesToDatabase(CurrentUser.getInstance().getUid());
+                } else {
+                    // Handle case where the allGroceries array doesn't exist for the scanned user
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        });
+    }
+    public void saveAllGroceriesToDatabase(String userId) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo")
+                .child(userId)
+                .child("homeData")
+                .child("allGroceries");
+        ArrayList<GroceryItem> allGroceries = CurrentUser.getInstance().getUserProfile().getHomeData().getGroceryItemsList();
+        userRef.setValue(allGroceries).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                // Handle completion if needed
+            }
+        });
+    }
+
+    /*
+    private void saveHomeDataToScannedUser() {
+
+        for(String homeMember : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()){
+            DatabaseReference memRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(homeMember);
+            DatabaseReference memtasksRef = memRef.child("homeData").child("allTasks");
+            memtasksRef.setValue(CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks());
+
+        }
+
+        for(String homeMember : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()){
+            DatabaseReference memRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(homeMember);
+            DatabaseReference memtasksRef = memRef.child("homeData").child("allGroceries");
+            memtasksRef.setValue(CurrentUser.getInstance().getUserProfile().getHomeData().getGroceryItemsList());
+
+        }
+
+
+        for(String homeMember : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()){
+            DatabaseReference memRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(homeMember);
+            DatabaseReference memtasksRef = memRef.child("homeData").child("allTransactions");
+            memtasksRef.setValue(CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList());
+
+        }
+    }
+*/
+
+
 }
+

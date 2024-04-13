@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.homie.Activities.LoginActivity;
 import com.example.homie.Activities.MainActivity;
+import com.example.homie.Activities.ProfileActivity;
 import com.example.homie.Activities.addHomeMemberActivity;
 import com.example.homie.Models.CurrentUser;
 import com.example.homie.Models.GroceryItem;
@@ -155,8 +156,10 @@ public class HomeFragment extends Fragment {
         initDate();
         initOnClickListenerOnImages();
         initLogOut();
+        initChangeToUserProfileActivity();
 
     }
+
 
     private void initLogOut() {
         home_SIV_signOut.setOnClickListener(v->{
@@ -504,4 +507,25 @@ public class HomeFragment extends Fragment {
 
 
     }
+
+
+    private void initChangeToUserProfileActivity() {
+        circular_image_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to start the UserProfileActivity
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+
+                // Put the user UID as an extra in the Intent
+                intent.putExtra("USER_UID", CurrentUser.getInstance().getUid());
+
+                // Start the UserProfileActivity
+                startActivity(intent);
+
+                // Finish the current activity
+                //getActivity().finish();
+            }
+        });
+    }
+
 }

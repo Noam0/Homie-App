@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +73,7 @@ public class ShoppingFragment extends Fragment {
          findViews(view);
          initRecyclerView();
          initButtonAddAndCancel();
-        initSortingButtons();
+         initSortingButtons();
          return view;
 
     }
@@ -119,21 +120,26 @@ public class ShoppingFragment extends Fragment {
     }
 
     private void addGroceryItemOnClickListener() {
+        String groceryDescription = Grocery_format_name.getText().toString();
+        String groceryAmount = Grocery_format_amount.getText().toString();
 
-        String groceryDescription = "";
-        String groceryAmount = "";
-        if(Grocery_format_name.getText().length() != 0 && Grocery_format_amount.getText().length() != 0){
-            groceryDescription = Grocery_format_name.getText().toString();
-            groceryAmount = Grocery_format_amount.getText().toString();
-            addGrocery(groceryDescription,groceryAmount);
-            Toast.makeText(getActivity(), "Transaction successfully added!", Toast.LENGTH_SHORT).show();
-            Grocery_format_name.setText("");
-            Grocery_format_amount.setText("");
-        }else {
-            Toast.makeText(getActivity(), "Transaction description or transaction amount cannot be empty", Toast.LENGTH_SHORT).show();
-
+        // Check if groceryDescription and groceryAmount are not empty
+        if (!TextUtils.isEmpty(groceryDescription) && !TextUtils.isEmpty(groceryAmount)) {
+            // Check if groceryAmount contains only digits
+            if (TextUtils.isDigitsOnly(groceryAmount)) {
+                // It's a number, proceed with adding the grocery item
+                addGrocery(groceryDescription, groceryAmount);
+                Toast.makeText(getActivity(), "Shopping Item successfully added!", Toast.LENGTH_SHORT).show();
+                Grocery_format_name.setText("");
+                Grocery_format_amount.setText("");
+            } else {
+                // Show an error message indicating invalid input for grocery amount
+                Toast.makeText(getActivity(), "Please enter a valid number for item amount", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // Show an error message indicating that description or amount cannot be empty
+            Toast.makeText(getActivity(), "Shopping item description or item amount cannot be empty", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void addGrocery(String groceryDescription, String groceryAmount){
@@ -242,15 +248,19 @@ public class ShoppingFragment extends Fragment {
         Grocery_BTN_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String groceryDescription = Grocery_format_name.getText().toString();
+                String groceryAmount = Grocery_format_amount.getText().toString();
 
-                String groceryDescription = "";
-                groceryDescription = Grocery_format_name.getText()+"";
-
-                String groceryAmount = "";
-                groceryAmount = Grocery_format_amount.getText()+"";
-                updateTransaction(groceryItem,position,groceryDescription,groceryAmount);
-                Grocery_format_name.setText("");
-                Grocery_format_amount.setText("");
+                // Check if groceryAmount contains only digits
+                if (!TextUtils.isEmpty(groceryAmount) && TextUtils.isDigitsOnly(groceryAmount)) {
+                    // It's a number, proceed with updating transaction
+                    updateTransaction(groceryItem, position, groceryDescription, groceryAmount);
+                    Grocery_format_name.setText("");
+                    Grocery_format_amount.setText("");
+                } else {
+                    // Show an error message indicating invalid input
+                    Toast.makeText(getContext(), "Please enter a valid number for grocery amount", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

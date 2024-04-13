@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,19 +34,23 @@ import com.example.homie.Models.TransactionType;
 import com.example.homie.R;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class BudgetFragment extends Fragment {
-    private AppCompatButton buttonIncome;
-    private AppCompatButton buttonOutCome;
+    private MaterialTextView buttonIncome;
+    private MaterialTextView buttonOutCome;
+    private MaterialTextView MTV_user;
     private ShapeableImageView Budget_BTN_add;
     private RecyclerView Budget_RCV_transactionRCV;
     private ArrayList<Transaction> allTransactions;
@@ -68,9 +73,11 @@ public class BudgetFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
         findViews(view);
         initRecyclerView();
-       // initTransactionList();
+        initSortingButtons();
+        //initTransactionList();
         initSpinner();
         initButtonAddAndCancel();
+
         return view;
 
     }
@@ -80,9 +87,104 @@ public class BudgetFragment extends Fragment {
     private void findViews(View view) {
         buttonIncome = view.findViewById(R.id.buttonIncome);
         buttonOutCome = view.findViewById(R.id.buttonOutCome);
+        MTV_user = view.findViewById(R.id.MTV_user);
         Budget_BTN_add = view.findViewById(R.id.Budget_BTN_add);
         Budget_RCV_transactionRCV = view.findViewById(R.id.Budget_RCV_transactionRCV);
     }
+
+    private void initSortingButtons() {
+        buttonIncome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonIncome.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
+                buttonOutCome.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                MTV_user.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                sortByIncome();
+            }
+        });
+
+        buttonOutCome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonIncome.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonOutCome.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
+                MTV_user.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                sortByOutcome();
+            }
+        });
+
+
+        MTV_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonIncome.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonOutCome.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                MTV_user.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
+                sortByUser();
+            }
+        });
+    }
+
+    private void sortByUser() {
+
+        Log.d("IMHERE130", allTransactions.toString());
+        Collections.sort(allTransactions, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction transaction1, Transaction transaction2) {
+                // Compare transactions based on their URL image
+                return transaction1.getUrlImageOfTransactionMaker().compareTo(transaction2.getUrlImageOfTransactionMaker());
+            }
+        });
+        Log.d("IMHERE130", allTransactions.toString());
+        adapter.notifyDataSetChanged(); // Notify adapter of data change
+    }
+
+    private void sortByIncome() {
+        Collections.sort(allTransactions, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction transaction1, Transaction transaction2) {
+                // Debugging: Log transaction types
+                Log.d("Transaction Type 1", transaction1.getType().toString());
+                Log.d("Transaction Type 2", transaction2.getType().toString());
+
+                // Compare transactions based on their type (Income first)
+                if (transaction1.getType() == TransactionType.INCOME && transaction2.getType() == TransactionType.EXPENSE) {
+                    return -1;
+                } else if (transaction1.getType() == TransactionType.EXPENSE && transaction2.getType() == TransactionType.INCOME) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        adapter.notifyDataSetChanged(); // Notify adapter of data change
+    }
+
+    private void sortByOutcome() {
+        Collections.sort(allTransactions, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction transaction1, Transaction transaction2) {
+                // Debugging: Log transaction types
+                Log.d("Transaction Type 1", transaction1.getType().toString());
+                Log.d("Transaction Type 2", transaction2.getType().toString());
+
+                // Compare transactions based on their type (Outcome first)
+                if (transaction1.getType() == TransactionType.EXPENSE && transaction2.getType() == TransactionType.INCOME) {
+                    return -1;
+                } else if (transaction1.getType() == TransactionType.INCOME && transaction2.getType() == TransactionType.EXPENSE) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        adapter.notifyDataSetChanged(); // Notify adapter of data change
+    }
+
+
+
+
+
 
     private void initRecyclerView() {
         adapter = new TransactionAdapter(getActivity().getApplicationContext(), allTransactions);
@@ -138,19 +240,29 @@ public class BudgetFragment extends Fragment {
             addTransaction_BTN_confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     String incomeOrOutcome = getTransactionkCategoryFromSpinner();
-                    String transactionDescription = "";
-                    transactionDescription = transaction_format_description.getText()+"";
+                    String transactionDescription = transaction_format_description.getText().toString();
+                    String transactionAmount = transaction_format_amount.getText().toString();
 
-                    String transactionAmount = "";
-                    transactionAmount = transaction_format_amount.getText()+"";
-                    updateTransaction(transaction,position,incomeOrOutcome,transactionDescription,transactionAmount);
-                    transaction_format_amount.setText("");
-                    transaction_format_description.setText("");
+                    // Check if transactionDescription and transactionAmount are not empty
+                    if (!TextUtils.isEmpty(transactionDescription) && !TextUtils.isEmpty(transactionAmount)) {
+                        // Check if transactionAmount contains only digits
+                        if (TextUtils.isDigitsOnly(transactionAmount)) {
+                            // It's a number, proceed with updating the transaction
+                            updateTransaction(transaction, position, incomeOrOutcome, transactionDescription, transactionAmount);
+                            Toast.makeText(getActivity(), "Transaction successfully updated!", Toast.LENGTH_SHORT).show();
+                            transaction_format_amount.setText("");
+                            transaction_format_description.setText("");
+                        } else {
+                            // Show an error message indicating invalid input for transaction amount
+                            Toast.makeText(getActivity(), "Please enter a valid number for transaction amount", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        // Show an error message indicating that description or amount cannot be empty
+                        Toast.makeText(getActivity(), "Transaction description or transaction amount cannot be empty", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
-
 
 
     }
@@ -258,25 +370,27 @@ public class BudgetFragment extends Fragment {
     }
 
     private void addTransactionOnClickListener() {
+        String incomeOrOutCome = getTransactionkCategoryFromSpinner(); // Getting category
+        String transactionDescription = transaction_format_description.getText().toString();
+        String transactionAmount = transaction_format_amount.getText().toString();
 
-        String incomeOrOutCome = getTransactionkCategoryFromSpinner();//getting category
-        Date transactionDate = new Date();
-        //taskDeadline = getDeadline();//getting date
-        String transactionDescription = "";
-        String transactionAmount = "";
-        if(transaction_format_description.getText().length() != 0 && transaction_format_amount.getText().length() != 0){
-            transactionDescription = getTransactionDescription();
-            transactionAmount = getTransactionAmount();
-            addTransaction(transactionDescription,transactionAmount,incomeOrOutCome);
-            Toast.makeText(getActivity(), "Transaction successfully added!", Toast.LENGTH_SHORT).show();
-            transaction_format_description.setText("");
-            transaction_format_amount.setText("");
-        }else {
+        // Check if transactionDescription and transactionAmount are not empty
+        if (!TextUtils.isEmpty(transactionDescription) && !TextUtils.isEmpty(transactionAmount)) {
+            // Check if transactionAmount contains only digits
+            if (TextUtils.isDigitsOnly(transactionAmount)) {
+                // It's a number, proceed with adding the transaction
+                addTransaction(transactionDescription, transactionAmount, incomeOrOutCome);
+                Toast.makeText(getActivity(), "Transaction successfully added!", Toast.LENGTH_SHORT).show();
+                transaction_format_description.setText("");
+                transaction_format_amount.setText("");
+            } else {
+                // Show an error message indicating invalid input for transaction amount
+                Toast.makeText(getActivity(), "Please enter a valid number for transaction amount", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // Show an error message indicating that description or amount cannot be empty
             Toast.makeText(getActivity(), "Transaction description or transaction amount cannot be empty", Toast.LENGTH_SHORT).show();
-
         }
-
-
     }
     private void addTransaction(final String transactionDescription,String transactionAmount,String inComeOrOutCome) {
 

@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.example.homie.Models.CurrentUser;
 import com.example.homie.Models.Event;
@@ -23,6 +24,7 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +42,7 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
-    private MaterialButton SIGN_OUT_BTN;
+
     private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseRef = mDatabase.getReference();
     private FirebaseUser firebaseUser;
@@ -49,10 +51,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //hide purpule bar at the top
+        //hide purple bar at the top
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         findViews();
-        initViews();
+        //initViews();
         auth = FirebaseAuth.getInstance();
     }
 
@@ -62,34 +64,36 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = auth.getCurrentUser();
         if(currentUser == null) {
             login();
-        }else {
+        } else {
             loadUser();
         }
-
     }
 
 
-
-
-
-
-    private void initViews() {
-        SIGN_OUT_BTN.setOnClickListener(v -> {
-            AuthUI.getInstance()
-                    .signOut(this)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        public void onComplete(@NonNull Task<Void> task) {
-                            // ...
-                        }
-                    });
-
-
-        });
-    }
 
     private void findViews() {
 
-        SIGN_OUT_BTN = findViewById(R.id.SIGN_OUT_BTN);
+    }
+
+    private void login(String email, String password) {
+        // Attempt to sign in with email and password
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = auth.getCurrentUser();
+                            // Navigate to main activity or home screen
+                            goToMainActivity();
+                        } else {
+                            // If sign in fails, display a message to the user.
+
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private void login() {
@@ -98,15 +102,14 @@ public class LoginActivity extends AppCompatActivity {
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.PhoneBuilder().build());
 
-// Create and launch sign-in intent
+        // Create and launch sign-in intent
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setLogo(R.drawable.task_icon)
+                //.setLogo(R.drawable.splashhomiz)
                 .build();
         signInLauncher.launch(signInIntent);
     }
-
 
     // See: https://developer.android.com/training/basics/intents/result
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
@@ -134,7 +137,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
     private void loadUser() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
@@ -144,10 +146,8 @@ public class LoginActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         CurrentUser.getInstance().setUserProfile(snapshot.getValue(User.class));
-
                     } else {
                         createNewUser();
-
                     }
                     goToMainActivity();
                 }
@@ -160,13 +160,9 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Handle case where user is not logged in
         }
-
     }
 
-
     private void createNewUser() {
-
-
         User newUser = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(),firebaseUser.getPhotoUrl().toString());
         CurrentUser.getInstance().setUserProfile(newUser);
         databaseRef = FirebaseDatabase.getInstance().getReference("UserInfo");

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.addHomeMemberActivity"
-    android:background="@drawable/backgroundhomie2">
+    android:background="@drawable/backgroundhomie5">
 
 
 
@@ -23,7 +23,8 @@
             android:textStyle="bold"
             android:textAlignment="center"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppinsbold">
 
         </com.google.android.material.textview.MaterialTextView>
 
@@ -36,23 +37,47 @@
             android:layout_marginTop="10dp">
         </ImageView>
 
+
+<LinearLayout
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/AMA_MTV_scan"
-            android:text="scan qr code of your partner"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Scan qr code of your partner"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textAlignment="center"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:clickable="true">
+            android:layout_marginTop="3dp"
+            android:clickable="true"
+            android:fontFamily="@font/poppinsbold">
 
         </com.google.android.material.textview.MaterialTextView>
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_document_scanner_24"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="3dp">
+
+        </com.google.android.material.imageview.ShapeableImageView>
+
+</LinearLayout>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/SCAN_ACB_goBack"
             android:text="go back"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp">
+            android:layout_marginTop="40dp"
+            android:textColor="@color/white"
+            android:background="@color/main_green_color"
+            android:fontFamily="@font/poppinsmedium">
         </androidx.appcompat.widget.AppCompatButton>
     </GridLayout>
 
