@@ -12,7 +12,6 @@ public class HomeData {
 
     private ArrayList<Transaction> transactionsList;
 
-    private ArrayList<Event> eventsList;
 
     private ArrayList<GroceryItem> groceryItemsList;
 
@@ -20,7 +19,6 @@ public class HomeData {
     public HomeData() {
         allTasks = new ArrayList(); // Initialize as a HashMap
         transactionsList = new ArrayList<>();
-        eventsList = new ArrayList<>();
         groceryItemsList = new ArrayList<>();
     }
 
@@ -40,13 +38,7 @@ public class HomeData {
         this.transactionsList = transactionsList;
     }
 
-    public ArrayList<Event> getEventsList() {
-        return eventsList;
-    }
 
-    public void setEventsList(ArrayList<Event> eventsList) {
-        this.eventsList = eventsList;
-    }
 
     public ArrayList<GroceryItem> getGroceryItemsList() {
         return groceryItemsList;
@@ -71,7 +63,6 @@ public class HomeData {
         return "HomeData{" +
                 "allTasks=" + allTasks +
                 ", transactionsList=" + transactionsList +
-                ", eventsList=" + eventsList +
                 ", groceryItemsList=" + groceryItemsList +
                 '}';
     }

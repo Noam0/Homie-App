@@ -310,8 +310,8 @@ public class ShoppingFragment extends Fragment {
             public void onClick(View v) {
 
                 MTV_amount.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
-                MTV_abc.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
-                MTV_bought.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                MTV_abc.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                MTV_bought.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 sortByAmount();
             }
         });
@@ -320,9 +320,9 @@ public class ShoppingFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                MTV_amount.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                MTV_amount.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 MTV_abc.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
-                MTV_bought.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                MTV_bought.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
 
                 sortByABC();
             }
@@ -332,8 +332,8 @@ public class ShoppingFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                MTV_amount.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
-                MTV_abc.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                MTV_amount.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                MTV_abc.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 MTV_bought.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
                 sortByBought();
             }

@@ -2,11 +2,13 @@ package com.example.homie.Fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -73,6 +75,8 @@ public class HomeFragment extends Fragment {
     private MaterialTextView diaglog_user_info_headline;
 
     private ShapeableImageView home_SIV_signOut;
+
+    private ShapeableImageView home_SIV_totalExpensesImage;
 
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
@@ -143,6 +147,7 @@ public class HomeFragment extends Fragment {
         home_MTV_GroceryItems = view.findViewById(R.id.home_MTV_GroceryItems);
         home_MTV_date = view.findViewById(R.id.home_MTV_date);
         home_SIV_signOut = view.findViewById(R.id.home_SIV_signOut);
+        home_SIV_totalExpensesImage = view.findViewById(R.id.home_SIV_totalExpensesImage);
 
     }
 
@@ -190,10 +195,18 @@ public class HomeFragment extends Fragment {
 
 
     private void InitViewsOfIncomeAndExpense() {
-        Home_MTV_monthlyIncome.setText(totalIncomeThisMonth +"");
-        Home_MTV_monthlyExpense.setText(totalExpensesThisMonth+"");
+        Home_MTV_monthlyIncome.setText("+" +totalIncomeThisMonth +"");
+        Home_MTV_monthlyExpense.setText("-"+
+
+                totalExpensesThisMonth+"");
         double total = totalIncomeThisMonth - totalExpensesThisMonth;
-        Home_MTV_monthlyTotal.setText(total +"");
+        if(total >= 0) {
+            Home_MTV_monthlyTotal.setText("+" + total + "");
+        }else{
+            home_SIV_totalExpensesImage.setImageResource(R.drawable.outcome);
+            Home_MTV_monthlyTotal.setTextColor(Color.parseColor("#E05D5D"));
+            Home_MTV_monthlyTotal.setText(total + "");
+        }
 
     }
 

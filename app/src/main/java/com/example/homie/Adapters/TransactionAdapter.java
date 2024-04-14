@@ -1,6 +1,7 @@
 package com.example.homie.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,11 +54,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
             Transaction transaction = allTransactions.get(position);
             if (transaction.getType() == TransactionType.INCOME) {
-                holder.transaction_CV_cardViewBackground.setCardBackgroundColor(ContextCompat.getColor(context, R.color.incomeColor));
+                holder.row_RCV_transactionAmount.setText("+" + transaction.getAmount()+"");
+                holder.row_RCV_transactionAmount.setTextColor(ContextCompat.getColor(context, R.color.green_income_color));
+                holder.transaction_SIV_shah.setImageResource(R.drawable.shah_incom);
             } else if (transaction.getType() == TransactionType.EXPENSE) {
-                holder.transaction_CV_cardViewBackground.setCardBackgroundColor(ContextCompat.getColor(context, R.color.expenseColor));
+                holder.row_RCV_transactionAmount.setText("-" + transaction.getAmount()+"");
+                holder.row_RCV_transactionAmount.setTextColor(ContextCompat.getColor(context, R.color.main_red_color));
+                holder.transaction_SIV_shah.setImageResource(R.drawable.shah_expense);
+                holder.transaction_SIV_shah.setBackgroundColor(Color.TRANSPARENT);
             }
-            holder.row_RCV_transactionAmount.setText(transaction.getAmount()+"");
+
 
             String[] dateParts = transaction.getDate().split("-");
             holder.row_RCV_transactiondateDays.setText(dateParts[2]);
@@ -154,6 +160,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         ShapeableImageView row_BTN_transactionEdit;
 
         CardView transaction_CV_cardViewBackground;
+
+        ShapeableImageView transaction_SIV_shah;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             row_RCV_user = itemView.findViewById(R.id.row_RCV_user);
@@ -164,7 +172,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             transaction_CV_cardViewBackground = itemView.findViewById(R.id.transaction_CV_cardViewBackground);
             row_SIV_check = itemView.findViewById(R.id.row_SIV_check);
             row_BTN_transactionEdit = itemView.findViewById(R.id.row_BTN_transactionEdit);
-
+            transaction_SIV_shah = itemView.findViewById(R.id.transaction_SIV_shah);
             row_BTN_transactionEdit.setOnClickListener(v -> {
 
                 if(transactionCallBack != null){

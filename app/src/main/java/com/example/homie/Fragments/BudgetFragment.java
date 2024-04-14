@@ -97,8 +97,8 @@ public class BudgetFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 buttonIncome.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
-                buttonOutCome.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
-                MTV_user.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonOutCome.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                MTV_user.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 sortByIncome();
             }
         });
@@ -106,9 +106,9 @@ public class BudgetFragment extends Fragment {
         buttonOutCome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonIncome.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonIncome.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 buttonOutCome.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
-                MTV_user.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                MTV_user.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 sortByOutcome();
             }
         });
@@ -117,8 +117,8 @@ public class BudgetFragment extends Fragment {
         MTV_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonIncome.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
-                buttonOutCome.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonIncome.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                buttonOutCome.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 MTV_user.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
                 sortByUser();
             }

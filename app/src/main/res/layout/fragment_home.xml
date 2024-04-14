@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.HomeFragment"
-    android:background="@drawable/backgroundhomie5">
+    android:background="@drawable/backgroundhomie8">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -60,10 +60,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Welcome Homiz "
-            android:textSize="30sp"
+            android:textSize="27sp"
             android:textStyle="bold"
             android:fontFamily="@font/poppinsmedium"
-            android:textColor="@color/main_green_color"
+            android:textColor="@color/white"
 
             >
 
@@ -74,16 +74,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User"
-            android:textColor="@color/main_green_color"
+            android:textColor="@color/white"
             android:textStyle="bold"
-            android:textSize="30sp"
+            android:textSize="27sp"
             android:fontFamily="@font/poppinsmedium">
 
         </com.google.android.material.textview.MaterialTextView>
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="29dp"
+            android:layout_height="29dp"
             android:layout_marginTop="4dp"
             android:layout_marginStart="2dp"
             android:src="@drawable/waving_hand_svgrepo_com">
@@ -103,7 +103,7 @@
         android:layout_centerVertical="true"
         android:fontFamily="@font/poppinsmedium"
         android:text="14 April 2024"
-        android:textColor="@color/main_green_color"
+        android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="normal"
         android:layout_gravity="center_horizontal"
@@ -112,15 +112,13 @@
     </com.google.android.material.textview.MaterialTextView>
 
 
-
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
         android:layout_marginTop="175dp"
         android:elevation="0dp"
-        app:cardElevation="0dp"
+        app:cardElevation="5dp"
         android:layout_marginHorizontal="1dp"
         android:background="#ffffff">
 
@@ -132,8 +130,8 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:fontFamily="@font/poppinsmedium"
-            android:layout_marginTop="5dp"
-            android:textColor="#58A399"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/black_light"
             android:layout_gravity="center_vertical">
 
         </com.google.android.material.textview.MaterialTextView>
@@ -255,14 +253,14 @@
             app:cardCornerRadius="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginStart="2dp"
-            app:cardElevation="3dp"
-            app:cardBackgroundColor="#58A399"
-            app:cardUseCompatPadding="true">
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true"
+            >
 
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/cardviewfortaskshome4">
+    android:background="@drawable/cardviewfortaskshome9">
 
 
     <com.google.android.material.textview.MaterialTextView
@@ -274,7 +272,7 @@
         android:gravity="center"
         android:text="0 Home up coming tasks"
         android:textAlignment="center"
-        android:textColor="#58A399"
+        android:textColor="@color/white"
         android:textSize="19sp"
         android:textStyle="bold" />
 </RelativeLayout>
@@ -288,13 +286,13 @@
             app:cardCornerRadius="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginStart="2dp"
-            app:cardElevation="3dp"
+            app:cardElevation="4dp"
             app:cardBackgroundColor="#58A399"
             app:cardUseCompatPadding="true">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/cardviewfortaskshome4">
+    android:background="@drawable/cardviewforitemhome">
 
 
     <com.google.android.material.textview.MaterialTextView
@@ -306,7 +304,7 @@
         android:gravity="center_horizontal"
         android:text="0 items in shopping list"
         android:textAlignment="center"
-        android:textColor="#58A399"
+        android:textColor="@color/white"
         android:textSize="19sp"
         android:textStyle="bold" />
 </RelativeLayout>
@@ -320,8 +318,7 @@
             android:layout_width="match_parent"
             android:layout_height="325dp"
             android:columnCount="1"
-            android:rowCount="3">
-
+            android:rowCount="4">
 
 
 
@@ -335,21 +332,24 @@
                     android:layout_marginEnd="20dp"
                     app:contentPadding="3dp"
                     app:cardBackgroundColor="@color/white"
-                    app:cardElevation="0dp">
+                    app:cardElevation="5dp">
+
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:weightSum="5">
+    android:weightSum="5.5">
 
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="Monthly Expenses"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_blue_color"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/black_light"
                         android:layout_gravity="center_vertical"
                         android:textAlignment="center"
                         android:layout_marginStart="10dp"
@@ -361,9 +361,9 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="1000"
-                        android:textSize="30sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_blue_color"
+                        android:textColor="@color/main_red_color"
                         android:layout_gravity="center_vertical"
                         android:gravity="center"
                         android:layout_marginTop="5dp"
@@ -371,6 +371,14 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/poppinsmedium"
                         />
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/outcome"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.5">
+
+    </com.google.android.material.imageview.ShapeableImageView>
 
 
 
@@ -387,21 +395,22 @@
                 android:layout_marginEnd="20dp"
                 app:contentPadding="3dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardElevation="0dp">
+                app:cardElevation="5dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:weightSum="5">
+                    android:weightSum="5.5">
 
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="Monthly Income"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_blue_color"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/black_light"
                         android:layout_gravity="center_vertical"
                         android:textAlignment="center"
                         android:layout_marginStart="10dp"
@@ -413,9 +422,9 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="1000"
-                        android:textSize="30sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_blue_color"
+                        android:textColor="#54B435"
                         android:layout_gravity="center_vertical"
                         android:gravity="center"
                         android:layout_marginTop="5dp"
@@ -424,7 +433,14 @@
                         android:fontFamily="@font/poppinsmedium"
                         />
 
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/gain"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5">
 
+                    </com.google.android.material.imageview.ShapeableImageView>
 
 
                 </LinearLayout>
@@ -440,21 +456,23 @@
                 android:layout_marginEnd="20dp"
                 app:contentPadding="3dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardElevation="0dp">
+                app:cardElevation="5dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:weightSum="5">
+                    android:weightSum="5.5">
 
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="Monthly Total"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_blue_color"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/black_light"
                         android:layout_gravity="center_vertical"
                         android:textAlignment="center"
                         android:layout_marginStart="10dp"
@@ -466,9 +484,9 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="1000"
-                        android:textSize="30sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_blue_color"
+                        android:textColor="#54B435"
                         android:layout_gravity="center_vertical"
                         android:gravity="center"
                         android:layout_marginTop="5dp"
@@ -477,7 +495,15 @@
                         android:fontFamily="@font/poppinsmedium"
                         />
 
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/home_SIV_totalExpensesImage"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/gain"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5">
 
+                    </com.google.android.material.imageview.ShapeableImageView>
 
 
                 </LinearLayout>

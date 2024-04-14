@@ -475,8 +475,8 @@ public class TasksFragment extends Fragment {
             public void onClick(View v) {
 
                 buttonCategory.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
-                buttonDeadline.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
-                Task_MTV_done.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonDeadline.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                Task_MTV_done.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 sortByCategory();
             }
         });
@@ -485,9 +485,9 @@ public class TasksFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                buttonCategory.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonCategory.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 buttonDeadline.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
-                Task_MTV_done.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                Task_MTV_done.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
 
                 sortByDeadline();
             }
@@ -497,8 +497,8 @@ public class TasksFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                buttonCategory.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
-                buttonDeadline.setTextColor(ContextCompat.getColor(getContext(), R.color.main_green_color));
+                buttonCategory.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                buttonDeadline.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 Task_MTV_done.setTextColor(ContextCompat.getColor(getContext(), R.color.clicked_text_color));
                 sortByFinished();
             }

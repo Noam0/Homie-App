@@ -127,7 +127,7 @@ public class addHomeMemberActivity extends AppCompatActivity {
                     if (snapshot.exists()) {
                         String scannedUserName = snapshot.child("name").getValue(String.class);
                         String scannedUrl = snapshot.child("image").getValue(String.class);
-                        //HomeData memberHomeData = snapshot.child("homeData").getValue(HomeData.class);
+                        HomeData memberHomeData = snapshot.child("homeData").getValue(HomeData.class);
                         //Log.d("IMHERE133", memberHomeData.toString());
                         if (CurrentUser.getInstance().getUserProfile().getHomeMembersUid().contains(finalScannedUID)){
                             showScannedUserData(scannedUserName, scannedUrl,false);
@@ -137,7 +137,11 @@ public class addHomeMemberActivity extends AppCompatActivity {
                             getAllTasksSnapshot();
                             getAllGroceryItemsSnapshot();
                             getAllTransactionsSnapshot();
-                            //saveHomeDataToScannedUser();
+                            saveHomeDataToScannedUser();
+
+
+
+
                         }
 
                     } else {
@@ -172,7 +176,7 @@ public class addHomeMemberActivity extends AppCompatActivity {
 
         // Set user name and image
         userNameTextView.setText(userName);
-        Picasso.get().load(imageUrl).into(userImageView); // Assuming you are using Picasso for image loading
+        Picasso.get().load(imageUrl).into(userImageView);
 
         // Set custom view to the dialog
         builder.setView(dialogView);
@@ -331,33 +335,75 @@ public class addHomeMemberActivity extends AppCompatActivity {
         });
     }
 
-    /*
+
+    public void saveAllTasksToDatabase(String userId, ArrayList<Task> allTasks) {
+        DatabaseReference tasksRef = FirebaseDatabase.getInstance().getReference("UserInfo")
+                .child(userId)
+                .child("homeData")
+                .child("allTasks");
+        tasksRef.setValue(allTasks)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Handle completion if needed
+                    } else {
+                        // Handle failure
+                    }
+                });
+    }
+
+    public void saveAllGroceriesToDatabase(String userId, ArrayList<GroceryItem> allGroceries) {
+        DatabaseReference groceriesRef = FirebaseDatabase.getInstance().getReference("UserInfo")
+                .child(userId)
+                .child("homeData")
+                .child("allGroceries");
+        groceriesRef.setValue(allGroceries)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Handle completion if needed
+                    } else {
+                        // Handle failure
+                    }
+                });
+    }
+
+    public void saveAllTransactionsToDatabase(String userId, ArrayList<Transaction> allTransactions) {
+        DatabaseReference transactionsRef = FirebaseDatabase.getInstance().getReference("UserInfo")
+                .child(userId)
+                .child("homeData")
+                .child("allTransactions");
+        transactionsRef.setValue(allTransactions)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Handle completion if needed
+                    } else {
+                        // Handle failure
+                    }
+                });
+    }
+
+
     private void saveHomeDataToScannedUser() {
 
-        for(String homeMember : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()){
-            DatabaseReference memRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(homeMember);
-            DatabaseReference memtasksRef = memRef.child("homeData").child("allTasks");
-            memtasksRef.setValue(CurrentUser.getInstance().getUserProfile().getHomeData().getAllTasks());
+            HomeData homeData = CurrentUser.getInstance().getUserProfile().getHomeData();
 
+            for (String homeMember : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()) {
+                if (!homeMember.equals(CurrentUser.getInstance().getUid())) {
+                    DatabaseReference memRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(homeMember).child("homeData");
+
+                    // Save all tasks
+                    DatabaseReference tasksRef = memRef.child("allTasks");
+                    tasksRef.setValue(homeData.getAllTasks());
+
+                    // Save all groceries
+                    DatabaseReference groceriesRef = memRef.child("allGroceries");
+                    groceriesRef.setValue(homeData.getGroceryItemsList());
+
+                    // Save all transactions
+                    DatabaseReference transactionsRef = memRef.child("allTransactions");
+                    transactionsRef.setValue(homeData.getTransactionsList());
+                }
+            }
         }
-
-        for(String homeMember : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()){
-            DatabaseReference memRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(homeMember);
-            DatabaseReference memtasksRef = memRef.child("homeData").child("allGroceries");
-            memtasksRef.setValue(CurrentUser.getInstance().getUserProfile().getHomeData().getGroceryItemsList());
-
-        }
-
-
-        for(String homeMember : CurrentUser.getInstance().getUserProfile().getHomeMembersUid()){
-            DatabaseReference memRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(homeMember);
-            DatabaseReference memtasksRef = memRef.child("homeData").child("allTransactions");
-            memtasksRef.setValue(CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList());
-
-        }
-    }
-*/
-
 
 }
 

@@ -119,8 +119,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="horizontal">
+                android:layout_weight="1.5"
+                android:orientation="horizontal"
+                android:layout_marginRight="2dp">
 
                 <FrameLayout
                     android:id="@+id/grocery_FL_checker"
@@ -153,9 +154,12 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/row_BTN_GroceryEdit"
-                    android:layout_height="35dp"
-                    android:layout_width="35dp"
-                    android:src="@drawable/baseline_edit_24"
+                    android:layout_height="29dp"
+                    android:layout_width="29dp"
+                    android:src="@drawable/pencil"
+                    android:layout_marginLeft="3dp"
+
+                    android:layout_marginBottom="1dp"
                     android:scaleType="fitCenter"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp"

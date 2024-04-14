@@ -27,11 +27,6 @@
         android:layout_height="wrap_content"
         android:icon="@drawable/task_icon"
         android:title="Tasks" />
-    <item
-        android:id="@+id/calendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/calendar_icon"
-        android:title="Calendar" />
+
 
 </menu>
