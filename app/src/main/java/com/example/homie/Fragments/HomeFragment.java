@@ -196,12 +196,10 @@ public class HomeFragment extends Fragment {
 
     private void InitViewsOfIncomeAndExpense() {
         Home_MTV_monthlyIncome.setText("+" +totalIncomeThisMonth +"");
-        Home_MTV_monthlyExpense.setText("-"+
-
-                totalExpensesThisMonth+"");
+        Home_MTV_monthlyExpense.setText("-"+ totalExpensesThisMonth+"");
         double total = totalIncomeThisMonth - totalExpensesThisMonth;
         if(total >= 0) {
-            Home_MTV_monthlyTotal.setText("+" + total + "");
+            Home_MTV_monthlyTotal.setText("+" + total);
         }else{
             home_SIV_totalExpensesImage.setImageResource(R.drawable.outcome);
             Home_MTV_monthlyTotal.setTextColor(Color.parseColor("#E05D5D"));
@@ -349,8 +347,13 @@ public class HomeFragment extends Fragment {
                 if (snapshot.exists()) {
                     HomeData homeData = snapshot.getValue(HomeData.class);
                     if (homeData != null) {
-                        String taskCount = String.valueOf(homeData.getAllTasks().size());
-                        home_MTV_upComingTask.setText("You have " + taskCount + " upcoming tasks");
+                        int numOfTasks = 0;
+                        for(Task task : homeData.getAllTasks()){
+                            if(!task.isDone()){
+                                numOfTasks++;
+                            }
+                        }
+                        home_MTV_upComingTask.setText("You have " + numOfTasks + " upcoming tasks");
                         CurrentUser.getInstance().getUserProfile().setHomeData(homeData);
                         //Log.d("IMHERE222", homeData.getAllTasks().toString());
 
@@ -414,8 +417,13 @@ public class HomeFragment extends Fragment {
         FirebaseAuth auth;
         auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
-        String photoUrl = String.valueOf(currentUser.getPhotoUrl());
-        Picasso.get().load(photoUrl).into(circular_image_view);
+        if(currentUser.getPhotoUrl()!=null){
+            String photoUrl = String.valueOf(currentUser.getPhotoUrl());
+            Picasso.get().load(photoUrl).into(circular_image_view);
+        }else{
+            circular_image_view.setImageResource(R.drawable.defaulticon);
+        }
+
     }
 
 
@@ -427,13 +435,15 @@ public class HomeFragment extends Fragment {
 
 
     private void CalculateExpenseAndIncome() {
+        totalExpensesThisMonth = 0; // Reset the total expenses
+        totalIncomeThisMonth = 0;    // Reset the total income
 
+        // Calculate total expenses and income
         for(Transaction transaction : CurrentUser.getInstance().getUserProfile().getHomeData().getTransactionsList()){
             if(transaction.getType() == TransactionType.EXPENSE ){
                 totalExpensesThisMonth += transaction.getAmount();
-            }else{
+            } else {
                 totalIncomeThisMonth += transaction.getAmount();
-
             }
         }
     }

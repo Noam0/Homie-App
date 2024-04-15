@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.example.homie.Fragments.BudgetFragment;
@@ -21,6 +22,8 @@ import com.example.homie.R;
 import com.example.homie.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -90,9 +93,14 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String scannedUserId = getIntent().getStringExtra("SCANNED_USER_ID");
+        Log.d("scannedUSER", "onResume: " + scannedUserId);
     }
+
+}
 
 
 

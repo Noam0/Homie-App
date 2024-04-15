@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="taking out the trash"
-                    android:textColor="@color/greyLightText"
+                    android:textColor="@color/black_light"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_gravity="center"

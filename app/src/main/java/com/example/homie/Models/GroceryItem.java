@@ -54,7 +54,13 @@ public class GroceryItem {
         return this;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "GroceryItem{" +
+                "name='" + name + '\'' +
+                ", wasBought=" + wasBought +
+                ", urlImageOfTransactionMaker='" + urlImageOfTransactionMaker + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

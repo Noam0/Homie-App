@@ -69,4 +69,15 @@ public class Transaction {
         this.type = type;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "amount=" + amount +
+                ", description='" + description + '\'' +
+                ", date='" + date + '\'' +
+                ", type=" + type +
+                ", urlImageOfTransactionMaker='" + urlImageOfTransactionMaker + '\'' +
+                '}';
+    }
 }

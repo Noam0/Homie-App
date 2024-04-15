@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Finished"
+            android:text="Completed"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:fontFamily="@font/poppinsmedium"

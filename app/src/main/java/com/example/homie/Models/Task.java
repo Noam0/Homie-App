@@ -58,4 +58,14 @@ public class Task {
         this.category = category;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "description='" + description + '\'' +
+                ", deadline='" + deadline + '\'' +
+                ", done=" + done +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }

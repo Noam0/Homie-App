@@ -19,6 +19,25 @@
     </style>
 
 
+    <style name="CustomLoginTheme" parent="FirebaseUI">
+        <!-- Primary branding color -->
+        <item name="colorPrimary">#00A19D</item>
+        <!-- Dark variant of the primary color -->
+        <item name="colorPrimaryDark">#007D79</item>
+        <!-- Accent color -->
+        <item name="colorAccent">#E05D5D</item>
+        <!-- Text color -->
+        <item name="android:textColorPrimary">@color/black</item>
+        <!-- Secondary text color -->
+        <item name="android:textColorSecondary">@color/black</item>
+        <!-- Background color -->
+        <item name="android:windowBackground">@drawable/loginthembackground</item>
+        <!-- Button color -->
+        <item name="colorButtonNormal">#E05D5D</item>
+        <!-- Control activated color -->
+        <item name="colorControlActivated">#E05D5D</item>
+
+    </style>
 
 
 </resources>
