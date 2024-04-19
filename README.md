@@ -7,9 +7,9 @@
 [INSERT_YOUR_APP_PRESENTATION_VIDEO_LINK_HERE]
 
 <p><strong>Screenshots:</strong></p>
-<img src="https://github.com/Noam0/Homie-App/assets/101128914/74d896e2-5aef-4f0a-8021-71c213e9d198" alt="Homepage" width="200" height="430">
-<img src="https://github.com/Noam0/Homie-App/assets/101128914/e1f5c291-137b-44ae-b7ea-95ec8e7b8a7e" alt="Transaction Fragment" width="200" height="430">
-<img src="https://github.com/Noam0/Homie-App/assets/101128914/11a3f3b3-81fb-43dd-83e2-2b57e1959c3a" alt="Scan Activity" width="200" height="430">
+<img src="https://github.com/Noam0/Homie-App/assets/101128914/74d896e2-5aef-4f0a-8021-71c213e9d198" alt="Homepage" width="215" height="430">
+<img src="https://github.com/Noam0/Homie-App/assets/101128914/e1f5c291-137b-44ae-b7ea-95ec8e7b8a7e" alt="Transaction Fragment" width="215" height="430">
+<img src="https://github.com/Noam0/Homie-App/assets/101128914/11a3f3b3-81fb-43dd-83e2-2b57e1959c3a" alt="Scan Activity" width="215" height="430">
 
 <p><strong>Project Description</strong></p>
 <p>Homiz is an Android application developed to streamline household management tasks and foster better communication among household members. The app provides features such as task management, grocery list creation, transaction tracking, and more, all aimed at enhancing the efficiency and organization of household operations.</p>
