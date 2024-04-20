@@ -4,7 +4,10 @@
 <p>Homiz is a collaborative household management app designed to simplify and optimize home management tasks for roommates or partners. With Homiz, coordinating household responsibilities and staying organized has never been easier.</p>
 
 <p><strong>App Presentation Video:</strong></p>
-[INSERT_YOUR_APP_PRESENTATION_VIDEO_LINK_HERE]
+<a href="https://www.youtube.com/watch?v=3qq319wCQlI">Watch the App Presentation Video</a>
+
+<p></p> <!-- Add an empty paragraph for spacing -->
+
 
 <p><strong>Screenshots:</strong></p>
 <img src="https://github.com/Noam0/Homie-App/assets/101128914/74d896e2-5aef-4f0a-8021-71c213e9d198" alt="Homepage" width="215" height="430">
